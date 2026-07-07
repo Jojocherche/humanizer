@@ -1,6 +1,6 @@
 ---
 name: humanizer
-version: 2.9.0
+version: 2.10.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
@@ -9,7 +9,8 @@ description: |
   symbolism, promotional language, superficial -ing analyses, vague attributions,
   em dash overuse, rule of three, AI vocabulary words, passive voice, negative
   parallelisms, filler phrases, flat sentence-length cadence (low burstiness),
-  narrow vocabulary range, and French-specific AI tells.
+  narrow vocabulary range, uniform paragraph architecture, syntactic uniformity,
+  redundant restatement, and French- and Spanish-specific AI tells.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -548,6 +549,55 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > The team spent an hour picking the proposal apart. Budget first. Then the timeline, which is where things got tense - half the room thought Q3 was fantasy, and by the time someone said "let's just table it," everyone looked relieved. Nothing got decided. That's fine for now.
 
 
+### 36. Uniform Paragraph Architecture (Flat Cohesion)
+
+**Problem:** AI collapses variation at the paragraph level the same way it collapses variation at the sentence level (§35). A 2026 study of AI-augmented essays found the spread of paragraph-cohesion scores shrinking by roughly 70-80% compared with matched human writing once AI assistance entered the process - human paragraphing is uneven by nature, AI paragraphing converges on one template. In practice: every paragraph runs three to five sentences, opens with a claim, backs it with two supporting sentences, and closes with a bridging transition, repeated block after block for the whole piece. Human writing weighs paragraphs by what they need to say, not by a template: a one-line paragraph for emphasis, a long one that wanders through several related points, then a short aside.
+
+**Before:**
+> The team completed the migration in March. This reduced query latency significantly. Users reported a smoother experience overall.
+>
+> The rollout also improved system reliability. Fewer errors were logged in the following weeks. The engineering team considered this phase a success.
+>
+> Looking ahead, further optimizations are planned for the next quarter. These will focus on scalability and cost reduction. The roadmap remains on track.
+
+**After:**
+> The migration finished in March, about two weeks later than planned, because the old sharding scheme turned out to be undocumented and someone had to reverse-engineer it from query logs before the cutover could even start.
+>
+> Latency dropped. A lot, actually - the p99 numbers looked wrong at first, and two people on the team spent an afternoon convinced they'd broken the monitoring.
+>
+> Next quarter is scalability and cost. No surprises there.
+
+
+### 37. Syntactic Uniformity (Same Clause Shape, Every Sentence)
+
+**Problem:** Beyond sentence length (§35) and vocabulary (§34), AI text tends to reuse the same syntactic shape sentence after sentence - typically a main clause followed by one or two right-branching subordinate clauses ("because...", "which...", "as a result of..."). Dependency-parsing studies comparing human and LLM text find human writing uses shorter, more locally optimized dependency chains and a wider mix of structures (fragments, left-branching clauses, deeply nested asides), while LLM output defaults to longer, more uniform right-branching chains even when each individual sentence is perfectly grammatical - models achieve near-perfect grammaticality but noticeably less structural variety than human writers.
+
+**Before:**
+> Because the system had been running for several hours without interruption, and because the logs showed no anomalies, the team concluded the deployment was stable. Because the metrics remained consistent throughout the following day, and because no user complaints were received, the rollout was extended to all regions.
+
+**After:**
+> Ran fine for hours. No errors in the logs, though nobody had actually checked the disk since Tuesday, which, in hindsight, was the whole problem. Metrics held the next day too, so the rollout went everywhere - a decision made mostly because nothing had broken yet, not because anyone was fully confident.
+
+
+### 38. Redundant Restatement (Saying the Same Thing Twice, Differently)
+
+**Problem:** Distinct from elegant variation (§11, cycling synonyms for the same referent in one passage) and distinct from verbatim n-gram repetition: this is semantic-level restatement, where a document asserts the same conclusion two or three times in different words, as if repetition alone added weight. It is harder to catch automatically than word-for-word repetition because the phrasing changes each time - published research on LLM redundancy mostly measures exact or near-exact n-gram overlap, not paraphrastic restatement of an idea, so this pattern is flagged here as a frequently observed editorial tell rather than a directly measured one. Catch it by reading for the shape of the argument, not just the words: has this claim already been made, in other words, earlier in the piece?
+
+**Before:**
+> The results demonstrate a clear improvement in accuracy across all test conditions.
+>
+> [... two paragraphs later ...]
+>
+> Overall, these findings show that model performance was meaningfully enhanced relative to the baseline.
+
+**After:**
+> Accuracy improved across all test conditions, from 71% to 84% on the held-out set.
+>
+> [... two paragraphs later, add something new instead of repeating the headline claim ...]
+>
+> The gain was smallest on the noisy-label subset, which suggests the model still leans on clean examples more than we'd like.
+
+
 ## DETECTION GUIDANCE
 
 ### What NOT to flag (false positives)
@@ -567,6 +617,8 @@ A clean human writer can hit several of the patterns above without any AI involv
 - **Unsourced claims.** Most of the web is unsourced. Lack of citations doesn't prove anything.
 - **Correct, complex formatting.** Visual editors and templates produce clean output without any AI.
 - **Secondhand text.** Do not rewrite watched phrases inside quotations, titles, proper names, or examples where the phrase is being discussed rather than used.
+- **Simple, consistent prose from a non-native English writer.** Published research on automated AI-detector false positives (not just this skill's own heuristics) found several commercial detectors flagging over half of TOEFL essays by non-native English speakers as AI-generated - because the same low-perplexity, low-burstiness signal that flags AI text also describes competent, simplified L2 writing. Don't mistake careful-but-simple prose from a second-language writer for AI just because it lacks burstiness.
+- **Formulaic, repetitive phrasing from neurodivergent writers.** For the same underlying reason, autistic and ADHD writers who default to structured, repetitive phrasing are flagged by these same detectors at elevated rates. Consistency reads as "AI-like" to a classifier even when it is a genuine, longstanding personal style.
 
 When in doubt, look for **clusters** of tells, not isolated ones. A single em dash means nothing; em dashes plus rule-of-three plus *vibrant tapestry* plus a "Conclusion" section is a confession.
 
@@ -626,6 +678,45 @@ The patterns above transfer directly to French, but French has its own typograph
 
 **After:**
 > Elle s'est rendu compte que l'occasion était trop belle, et a décidé de soutenir le projet à fond.
+
+
+## SPANISH-SPECIFIC PATTERNS
+
+Apply these in addition to, not instead of, the sections above when humanizing Spanish text. The evidence base here is thinner than for French: mostly Spanish-language tech-journalism consensus and established (pre-AI) anglicism research, not dedicated peer-reviewed corpus studies of AI Spanish. Treat these as strong editorial heuristics, not settled findings, and weight them accordingly.
+
+### S1. Typography and Punctuation
+
+**Problem:** AI output in Spanish often drops the inverted opening marks (¿ ¡) that Spanish requires at the start of questions and exclamations, and defaults to English-style straight double quotes ("...") instead of the angular guillemets («...») formal Spanish typography prefers. This mirrors the English-typography-default seen in French AI output (§F1) by analogy; no dedicated study confirms it for Spanish specifically, so flag it as a plausible, not confirmed, pattern.
+
+**Before:**
+> Como estas? Espero que estes bien, dijo ella entre comillas "normales."
+
+**After:**
+> ¿Cómo estás? Espero que estés bien, dijo ella entre «comillas» angulares.
+
+
+### S2. Overused AI Vocabulary in Spanish
+
+**Palabras a vigilar:** cabe destacar, es importante destacar, en conclusión/en resumen, en el panorama actual, vamos a explorar, cautivar, además, exhaustivo, de gran relevancia, un sinfín de, un abanico de, es fundamental, juega un papel clave/crucial, sin duda alguna.
+
+**Problem:** These cluster in AI-generated Spanish the way §7's English list clusters in AI-generated English, though the evidence is tech-journalism observation rather than a published corpus study. "Es importante destacar" and "en el panorama actual" are cited repeatedly as tells precisely because AI overuses them as generic, content-free transitions.
+
+**Before:**
+> Es importante destacar que, en el panorama actual, la sostenibilidad es un tema de gran relevancia que cabe destacar en cualquier estrategia empresarial.
+
+**After:**
+> La sostenibilidad ya es un eje central de cualquier estrategia empresarial.
+
+
+### S3. Anglicized Calques and False Friends
+
+**Problem:** The most solidly documented of the three Spanish patterns, though it comes from general anglicism/translation research rather than AI-specific study. AI-generated Spanish, trained on heavily translated and technical text, frequently reaches for an English-shaped calque over the natural Spanish word: "aplicar (para)" instead of "postularse a / solicitar," "soportar" instead of "apoyar / respaldar," "realizar" overused where plain "hacer" reads more natural.
+
+**Before:**
+> El equipo va a realizar un análisis para soportar la nueva funcionalidad, y los usuarios pueden aplicar para el programa beta.
+
+**After:**
+> El equipo hará un análisis para respaldar la nueva funcionalidad, y los usuarios pueden postularse al programa beta.
 
 
 ---
@@ -693,8 +784,46 @@ This skill is based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/
 
 Key insight from Wikipedia: "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
+**Detector landscape (context, not a target):** current AI-text detectors include GPTZero, Originality.ai, Copyleaks, Pangram, Winston AI, Turnitin, Sapling, ZeroGPT, and Grammarly's detector. The RAID benchmark (Dugan et al., ACL 2024) found detectors generalize poorly across unseen models and domains; Pangram's independently verified false-positive rate is 0.01-0.1%, including on non-native-English essays, while simpler tools underperform in most comparisons. This context is here to explain the false-positive guidance in DETECTION GUIDANCE above, not as a target to optimize against - see "What this skill does not do."
+
 
 ## Changelog
+
+### v2.10.0 - 2026-07-07
+
+Weekly evolution run: synced with upstream (already current, 0 new commits to merge), then went deeper via four parallel research passes into paragraph-level structure, syntactic uniformity, cross-document redundancy, the AI-detector landscape, and a new Spanish-specific section. Added a persistent routine-state log (`.claude/HUMANIZER-ROUTINE-LOG.md`) so future weekly runs extend this research instead of repeating it.
+
+**Added:**
+- §36 Uniform Paragraph Architecture (Flat Cohesion) - paragraph-length/shape uniformity as a measurable AI tell, mirroring §35 one level up
+- §37 Syntactic Uniformity (Same Clause Shape, Every Sentence) - dependency-structure monotony as a tell distinct from vocabulary or sentence length
+- §38 Redundant Restatement (Saying the Same Thing Twice, Differently) - semantic-level repetition across a document, distinct from elegant variation (§11) and from lexical n-gram repetition
+- Two new false-positive guidance bullets in "What NOT to flag": non-native-English writers and neurodivergent (autistic/ADHD) writers are disproportionately flagged by automated detectors for the same low-burstiness signal this skill treats as a tell - a reminder that these are editorial heuristics, not proof of AI authorship
+- New "Detector landscape" note under Reference: current detection tools and a summary of independent benchmark findings (RAID, Pangram), for context only
+- New SPANISH-SPECIFIC PATTERNS section (S1 typography, S2 overused AI vocabulary, S3 anglicized calques/false friends), evidence-graded as more observational than the French section
+
+**Rejected this run (logged, not added):** "AI prefers round numbers over precise figures" - no direct academic study found testing this claim; existing research on LLM numeric/hedging behavior doesn't confirm it. Discourse coherence as a standalone AI tell - only one study found (modest effect size); logged as a frontier for a future run once stronger evidence surfaces. Full detail in `.claude/HUMANIZER-ROUTINE-LOG.md`.
+
+**Sources consulted:**
+- [Does AI Homogenize Student Thinking? Structural Convergence in AI-Augmented Essays (arXiv 2603.21228)](https://arxiv.org/abs/2603.21228)
+- [Contrasting Linguistic Patterns in Human and LLM-Generated News Text (arXiv 2308.09067)](https://arxiv.org/abs/2308.09067)
+- [Contrasting Linguistic Patterns... (Artificial Intelligence Review, Springer)](https://link.springer.com/article/10.1007/s10462-024-10903-2)
+- [Benchmarking Linguistic Diversity of Large Language Models (arXiv 2412.10271, TACL)](https://arxiv.org/abs/2412.10271)
+- [A linguistic comparison between human- and AI-generated content (iScience, Cell Press 2026)](https://www.cell.com/iscience/fulltext/S2589-0042(26)00351-2)
+- [Narrative coherence in neural language models (PMC11998594, Frontiers in Psychology 2025)](https://pmc.ncbi.nlm.nih.gov/articles/PMC11998594/)
+- [RAID: A Shared Benchmark for Robust Evaluation of Machine-Generated Text Detectors (arXiv 2405.07940, ACL 2024)](https://arxiv.org/abs/2405.07940)
+- [Pangram: Human-in-the-Loop Detection of AI-Generated Text (arXiv 2402.14873)](https://arxiv.org/pdf/2402.14873)
+- [GPT detectors are biased against non-native English writers (arXiv 2304.02819 / PMC10382961)](https://pmc.ncbi.nlm.nih.gov/articles/PMC10382961/)
+- [The Misclassification of Autistic Writing as AI-Generated (ResearchGate 394678751)](https://www.researchgate.net/publication/394678751)
+- [Benchmark of Stylistic Variation in LLM-Generated Texts (arXiv 2509.10179)](https://arxiv.org/abs/2509.10179)
+- [Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate Implicit Writing Styles (arXiv 2509.14543)](https://arxiv.org/abs/2509.14543)
+- [Self-Repetition in Abstractive Neural Summarizers (arXiv 2210.08145, ACL Anthology 2022.aacl-short.42)](https://aclanthology.org/2022.aacl-short.42/)
+- [Standardizing the Measurement of Text Diversity (arXiv 2403.00553)](https://arxiv.org/pdf/2403.00553)
+- [From 'May' to 'Is': Certainty Distortion in Language Model Rewriting (arXiv 2606.07951)](https://arxiv.org/pdf/2606.07951)
+- [AuTexTification shared task, IberLEF (arXiv 2309.11285)](https://arxiv.org/abs/2309.11285)
+- [MULTITuDE: Multilingual Machine-Generated Text Detection Benchmark (arXiv 2310.13606)](https://arxiv.org/pdf/2310.13606)
+- ["Estas palabras y frases en tus textos dejan claro que has usado ChatGPT" - genbeta.com](https://www.genbeta.com/inteligencia-artificial/estas-palabras-frases-tus-textos-dejan-claro-has-usado-chatgpt)
+- [5 patrones de escritura IA que delatan tu contenido - ecosistemastartup.com](https://ecosistemastartup.com/5-patrones-de-escritura-ia-que-delatan-tu-contenido/)
+- [RAE - Cuándo se usa cada tipo de comillas](https://www.rae.es/espanol-al-dia/cuando-se-usa-cada-tipo-de-comillas)
 
 ### v2.9.0 - 2026-07-07
 
