@@ -39,14 +39,37 @@ covered).
 | v2.9.0 | 2026-06-30 | Differences between French and English — human.libretexts.org | textbook | FR/EN contrast |
 | v2.9.0 | 2026-06-30 | Written English Vs. Written French: A Comparison — italki.com | blog | FR/EN contrast |
 
-<!-- v2.10.0 rows appended below by this run -->
+| v2.10.0 | 2026-07-07 | StoryScope: Investigating idiosyncrasies in AI fiction — arxiv.org/abs/2604.03136 | arXiv | narrative-level tells in fiction |
+| v2.10.0 | 2026-07-07 | Does ChatGPT Write Like a Student? Engagement Markers in Argumentative Essays — journals.sagepub.com/doi/10.1177/07410883251328311 | Written Communication, SAGE (Q1) | reader-engagement markers |
+| v2.10.0 | 2026-07-07 | Rhetorical distinctions: metadiscourse in essays by ChatGPT and students — sciencedirect.com/.../S0889490625000134 | English for Specific Purposes (Q1) | metadiscourse |
+| v2.10.0 | 2026-07-07 | "This dissertation intricately explores...": ChatGPT's shell noun use — sciencedirect.com/.../S0346251X24003634 | System, ScienceDirect (Q1) | shell-noun anaphora |
+| v2.10.0 | 2026-07-07 | Metadiscursive nouns in academic argument: ChatGPT vs student practices — sciencedirect.com/.../S1475158525000451 | Journal of English for Academic Purposes (Q1) | shell-noun anaphora |
+| v2.10.0 | 2026-07-07 | Can AI simulate or emulate human stance? — sciencedirect.com/.../S0378216625001833 | ScienceDirect (2025) | stance/metadiscourse by genre |
+| v2.10.0 | 2026-07-07 | Engagement strategies in human-written and AI-generated academic essays — sciencedirect.com/.../S2215039025000219 | ScienceDirect (2025) | stance/metadiscourse by genre |
+| v2.10.0 | 2026-07-07 | Comparative analysis of text readability and writing styles in AI vs human academic abstracts — journals.plos.org/plosone/.../pone.0343163 | PLOS ONE (Q1) | clause packing / subordination |
+| v2.10.0 | 2026-07-07 | Comparing LLM-generated and human-authored news text using formal syntactic theory (Zamaraeva et al.) — aclanthology.org/2025.acl-long.443 | ACL 2025 main venue | formal syntax comparison |
+| v2.10.0 | 2026-07-07 | More Aligned, Less Diverse? Two Generations of LLMs — arxiv.org/abs/2605.06030 | arXiv, 2026 | diversity trend across model generations |
+| v2.10.0 | 2026-07-07 | Attacks on Machine-Text Detectors Retain Stylistic Fingerprints — arxiv.org/abs/2505.14608 | arXiv / ICML 2026 poster | evasion-attack robustness |
+| v2.10.0 | 2026-07-07 | What Distinguishes AI-Generated from Human Writing? A Rapid Review — mdpi.com/2504-2289/10/2/55 | Big Data and Cognitive Computing, MDPI (Q2) | 5-cue detection taxonomy |
+| v2.10.0 | 2026-07-07 | Comment "dé-IA-iser" nos écrits... — theconversation.com/.../281811 | The Conversation FR (academic linguists) | regional French register flattening |
+| v2.10.0 | 2026-07-07 | Comment Détecter l'Écriture IA : 15 Signes (2026) — cours-ndrc.fr/detecter-ecriture-ia-guide-2026 | blog, LOW CONFIDENCE — pattern ok, stat unverified | "dans le paysage de" calque |
+| v2.10.0 | 2026-07-07 | Quand l'humain parle comme ChatGPT — siecledigital.fr, reporting Max Planck Institute for Human Development study | news + academic corpus study | human vocabulary contamination |
+
+**Logged but not yet used (queued for a future run):**
+- When AI Settles Down (late-text volatility decay in token surprisal) — arxiv.org/abs/2601.04833
+- DivEye: Diversity Boosts AI-Generated Text Detection — arxiv.org/abs/2509.18880
+- Portuguese vs English human/AI text comparison — cell.com/iscience, S2589-0042(26)00351-2
+- Persuaficial multilingual persuasion benchmark (incl. French) — arxiv.org/abs/2601.04925
+- A model-independent redundancy measure for human vs ChatGPT authorship (OrphAnalytics/UNIL) — Scientific Reports, s41598-023-46390-8 (2023, pre-dates the 2025-2026 window but a solid canonical method citation if needed)
+
+<!-- v2.11.0 rows go below this line -->
 
 ## Journals / archives watchlist (tick as explored, add new ones as found)
 
 Academic archives:
 - [x] arXiv cs.CL (general search) — run 1, run 2
-- [ ] ACL Anthology (aclanthology.org) — direct venue browse, not just Google-surfaced arXiv preprints
-- [ ] HAL (hal.science) — francophone open archive
+- [x] ACL Anthology (aclanthology.org) — hit once via general search (Zamaraeva et al., ACL 2025), not yet directly browsed by venue/year
+- [ ] HAL (hal.science) — francophone open archive, still not directly browsed (run 2 found francophone material via The Conversation/press instead — do HAL directly next run)
 - [ ] Semantic Scholar API/browse for citation-forward search from the papers above (who cited StyloAI, MASH, etc. — citation chaining finds newer work fast)
 - [ ] Google Scholar "cited by" chase on the 3 most load-bearing papers already logged
 
@@ -54,10 +77,15 @@ Q1/Q2 journals not yet directly browsed (only reached via general search so far)
 - [ ] Computational Linguistics (MIT Press, Q1)
 - [ ] Language Resources and Evaluation (Springer, Q1/Q2)
 - [ ] Journal of Quantitative Linguistics (Q2)
-- [ ] Corpus (francophone, Q2) — French corpus linguistics
-- [ ] TAL — Traitement Automatique des Langues (francophone, ATALA)
-- [ ] Langages (francophone, Q2, linguistics)
-- [ ] Digital Scholarship in the Humanities — mined once (v2.9.0), re-check for newer issues each quarter, not every week
+- [ ] Corpus (francophone, Q2) — French corpus linguistics — still not directly browsed
+- [ ] TAL — Traitement Automatique des Langues (francophone, ATALA) — still not directly browsed
+- [ ] Langages (francophone, Q2, linguistics) — still not directly browsed
+- [x] Digital Scholarship in the Humanities — mined once (v2.9.0), re-check quarterly not weekly (next check-in: ~2026-10)
+- [x] System, ScienceDirect (Q1) — new this run (shell-noun study)
+- [x] English for Specific Purposes / Journal of English for Academic Purposes (Q1) — new this run (metadiscourse studies)
+- [x] Written Communication, SAGE (Q1) — new this run (engagement markers)
+- [x] Big Data and Cognitive Computing, MDPI (Q2) — new this run (5-cue taxonomy review)
+- [ ] iScience (Cell Press) — spotted a Portuguese vs English study here, queued, not yet mined for French-transferable angles
 
 Detector/test sites worth spot-checking behavior on (not academic, but useful ground truth):
 - [ ] GPTZero (mined for explainer content only so far, not tested against skill output)

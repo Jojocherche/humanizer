@@ -97,3 +97,22 @@ them.
   directly. always run that check before starting new work, and surface it
   to the human — don't just quietly stack another commit on an already-stuck
   branch.
+- (run 2, 2026-07-07) delegating the research fan-out to one general-purpose
+  agent with an explicit "here's the 14 sources already cited, here's the 35
+  pattern topics already covered, don't repeat, go wider" prompt worked well:
+  it came back with 11 solid non-overlapping sources plus 5 queued leads in
+  one pass, ~57 tool calls, no duplicate ground. Keep front-loading the
+  already-covered list into the research prompt every run instead of letting
+  the agent rediscover it — it's the single biggest lever against wasted
+  search.
+- (run 2, 2026-07-07) one source this run (cours-ndrc.fr, a non-academic
+  French blog) made a specific frequency claim ("~23% of AI intros") citing
+  an unverifiable "MIT study." Used the pattern, dropped the stat, flagged it
+  LOW CONFIDENCE in sources-log.md. Rule going forward: any stat from a
+  non-peer-reviewed source gets flagged in the log and never gets quoted as
+  a hard number in SKILL.md, only the qualitative pattern.
+- (run 2, 2026-07-07) still haven't done a direct venue browse of HAL, TAL,
+  Corpus, or Langages — francophone-specific gaps keep getting filled via
+  press coverage (The Conversation, Siècle Digital) of academic work instead
+  of the journals themselves. Next run: spend the francophone-archive slot
+  on HAL directly, not another general web sweep.
