@@ -1,6 +1,6 @@
 ---
 name: humanizer
-version: 2.9.0
+version: 2.10.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
@@ -9,7 +9,8 @@ description: |
   symbolism, promotional language, superficial -ing analyses, vague attributions,
   em dash overuse, rule of three, AI vocabulary words, passive voice, negative
   parallelisms, filler phrases, flat sentence-length cadence (low burstiness),
-  narrow vocabulary range, and French-specific AI tells.
+  narrow vocabulary range, model-specific vocabulary signatures, document-level
+  uniformity ("AI-print"), and French-specific AI tells.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -82,7 +83,9 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 
 **Reach for the one exact word.** A specific, slightly unusual word used correctly reads as human; a safe, generic one reads as AI. Stylometric studies find human text carries more hapax legomena - words used exactly once because they were the right word for one particular detail. Don't say "problem" when you mean "the timing belt is shredding itself."
 
-**Let sentences cluster, don't just alternate.** Real burstiness isn't "one short sentence, one long sentence, repeat" - it's three quick sentences in a row, then one that runs long enough to lose the thread, then quiet again. Researchers measure this as a burstiness score (variation in sentence length); human prose typically lands around 0.65-0.85, AI prose below 0.30. Check a paragraph's rhythm before finalizing: if every sentence is within a few words of the same length, that evenness is a tell on its own.
+**Let sentences cluster, don't just alternate.** Real burstiness isn't "one short sentence, one long sentence, repeat" - it's three quick sentences in a row, then one that runs long enough to lose the thread, then quiet again. Researchers measure this as a burstiness score (variation in sentence length); human prose typically lands around 0.65-0.85, AI prose below 0.30. Check a paragraph's rhythm before finalizing: if every sentence is within a few words of the same length, that evenness is a tell on its own. It goes deeper than paragraph-level variance, too: sentence-length swings in real writing show long-range correlation (a long stretch can echo a rhythm set several paragraphs earlier, the way a piece of music returns to a motif), where AI-generated sequences tend to reset randomly sentence to sentence with no memory of the rhythm that came before.
+
+**Let your rigor drift across a long piece.** A person writing five pages doesn't sustain identical polish throughout - the opening gets rewritten three times, the middle section is dashed off, a footnote goes on a tangent nobody asked for. Don't smooth a long draft into one uniform register from first line to last; uneven attention is a feature of real authorship, not a defect to fix (see §37 below).
 
 ### Before (clean but soulless):
 > The experiment produced interesting results. The agents generated 3 million lines of code. Some developers were impressed while others were skeptical. The implications remain unclear.
@@ -548,6 +551,28 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > The team spent an hour picking the proposal apart. Budget first. Then the timeline, which is where things got tense - half the room thought Q3 was fantasy, and by the time someone said "let's just table it," everyone looked relieved. Nothing got decided. That's fine for now.
 
 
+### 36. Model-Specific Vocabulary Signatures (Idiolects)
+
+**Problem:** Different LLMs don't just share a generic "AI voice" - each has its own recognizable vocabulary fingerprint, and newer word tells keep emerging as models update. Beyond the core list in §7, watch for: **meticulous**, **boast** (used as a verb, e.g. "the report boasts detailed analysis"), **moreover** and **furthermore** as sentence openers, and **robust** used as a vague positive ("a robust framework," "a robust approach"). Grok in particular over-relies on pseudo-scientific hedge words - **causal**, **empirical**, **correlate/correlation** - dropped into contexts that don't call for scientific precision, to sound rigorous rather than to add rigor. When a text leans hard on one model's specific tics rather than the general AI-vocabulary list, that is itself a stronger signal than any single word.
+
+**Before:**
+> The framework boasts a robust, empirical foundation. Moreover, the data suggests a causal correlation between the two variables, meticulously validated across several trials.
+
+**After:**
+> The framework rests on a solid base of test data. The two variables move together across several trials, though the tests don't establish that one causes the other.
+
+
+### 37. Document-Level Uniformity ("AI-print")
+
+**Problem:** Even after fixing every sentence-level tell, a long piece can still read as AI if it maintains one unwavering register, rigor, and quality from the first line to the last. Human-authored documents naturally drift: the introduction is punchier than the methods section, energy dips in the middle and picks up again near the end, one paragraph is dashed off while another is clearly labored over. AI output tends to hold a constant "AI-likeness" throughout - every section polished to the same degree, every paragraph carrying the same weight and pacing. This is a whole-document check, not a per-sentence one: after rewriting individual passages, read the full piece end to end and ask whether the polish level is suspiciously even. If it is, deliberately let some sections run looser than others rather than smoothing everything to the same finish.
+
+**Before (uniformly polished throughout):**
+> The onboarding process begins with account verification, which ensures a secure and streamlined experience for new users. Following verification, users are guided through a series of setup steps designed to configure their preferences efficiently. Finally, the dashboard presents a comprehensive overview, allowing users to navigate the platform with confidence and ease.
+
+**After (rigor varies naturally across the piece):**
+> First you verify the account - email link, done in ten seconds. Then there's a setup wizard that asks about your preferences; it's fine, a little long, three screens more than it needs to be. After that you land on the dashboard, which is honestly the best part - everything you need is right there and it doesn't make you hunt for it.
+
+
 ## DETECTION GUIDANCE
 
 ### What NOT to flag (false positives)
@@ -628,6 +653,17 @@ The patterns above transfer directly to French, but French has its own typograph
 > Elle s'est rendu compte que l'occasion était trop belle, et a décidé de soutenir le projet à fond.
 
 
+### F4. Paragraph-Block Uniformity and Formulaic Openers
+
+**Problem:** AI-generated French tends to organize text into blocks of near-identical length (paragraphs weighted around 15-25 words per sentence, each block opening with the same kind of logical connector), which reads as a template rather than as someone thinking on the page. Watch also for formulaic openers - **"Dans le paysage actuel..."**, **"Plongeons dans..."**, **"Il est essentiel de comprendre que..."** - and for anglicisms that go beyond calques of meaning into borrowed constructions, such as **"adresser un problème"** (from English "to address a problem") where French would use *traiter* or *résoudre*. A human writer varies paragraph length according to what each point needs, not according to a template.
+
+**Before:**
+> Dans le paysage actuel, il est essentiel de comprendre que les entreprises doivent adresser ce problème rapidement. Par ailleurs, plongeons dans les détails de la solution proposée par l'équipe technique. De plus, cette approche permet d'améliorer significativement la performance globale du système.
+
+**After:**
+> Les entreprises doivent régler ce problème vite. Voici ce que l'équipe technique propose : une solution qui, sur le papier, devrait nettement améliorer les performances du système.
+
+
 ---
 
 ## Process and Output
@@ -695,6 +731,36 @@ Key insight from Wikipedia: "LLMs use statistical algorithms to guess what shoul
 
 
 ## Changelog
+
+### v2.10.0 - 2026-07-07
+
+Weekly evolution run: re-synced with upstream `blader/humanizer` (no new upstream commits since last sync; `main` and this branch are current at `1b48564`) and this fork's own `main` (already at `40c7f43` / v2.9.0), then added patterns from a fresh round of 2026 stylometric, detection-evasion, and cross-language research.
+
+**Added:**
+- §36 Model-Specific Vocabulary Signatures (Idiolects) - new 2026 AI vocabulary tells (meticulous, boast as a verb, moreover/furthermore as openers, robust as vague praise) plus model-specific idiolects, notably Grok's pseudo-scientific hedge words (causal, empirical, correlate)
+- §37 Document-Level Uniformity ("AI-print") - a whole-document check: AI text holds one constant register/rigor across an entire piece, while human documents naturally drift in polish and energy section to section
+- F4 Paragraph-Block Uniformity and Formulaic Openers (French) - templated paragraph blocks, formulaic openers ("Dans le paysage actuel," "Plongeons dans," "Il est essentiel de comprendre que"), and the "adresser un problème" anglicism
+- PERSONALITY AND SOUL: two additions - long-range correlation in sentence-length rhythm (rhythm can echo across paragraphs, not just reset sentence to sentence), and letting rigor drift across a long piece instead of sustaining uniform polish throughout
+
+**Sources consulted:**
+- [What Is Burstiness in AI Detection? Complete Technical Explanation - thehumanizeai.pro](https://thehumanizeai.pro/articles/what-is-burstiness-ai-detection-explained)
+- [AI Text Detectors Flag Polished Human Writing as AI: New Studies Expose a Built-In Paradox - Tech Times](https://www.techtimes.com/articles/319137/20260626/ai-text-detectors-flag-polished-human-writing-ai-new-studies-expose-built-paradox.htm)
+- [How Do AI Detectors Work? Techniques, Limitations & More - GPTZero](https://gptzero.me/news/how-ai-detectors-work/)
+- [A Lightweight Approach to Detection of AI-Generated Texts Using Stylometric Features - arXiv 2511.21744](https://arxiv.org/abs/2511.21744)
+- [Stylometric Approach to AI-generated Texts - ACL Anthology (LaTeCH-CLfL 2026)](https://aclanthology.org/2026.latechclfl-1.21.pdf)
+- [New study reveals that AI cannot fully write like a human - TechXplore](https://techxplore.com/news/2025-12-reveals-ai-fully-human.html)
+- [Fractal Illusions: An Experimental Study of Long-Range Sentence-Length Correlations in Randomly Generated Natural Language Texts - arXiv 2508.19782](https://arxiv.org/pdf/2508.19782)
+- [A linguistic comparison between human- and AI-generated content - ScienceDirect / PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12969083/)
+- [Detector-Evasive LLM Paraphrasing via Constrained Policy Optimization - arXiv 2606.00392](https://arxiv.org/pdf/2606.00392)
+- [MASH: Evading Black-Box AI-Generated Text Detectors via Style Humanization - arXiv 2601.08564](https://arxiv.org/pdf/2601.08564)
+- [AuthorMist: Evading AI Text Detectors with Reinforcement Learning - arXiv 2503.08716](https://arxiv.org/pdf/2503.08716)
+- [List of 300+ AI Words, Phrases and Sentences to Avoid (2026) - Content Beta](https://www.contentbeta.com/blog/list-of-words-overused-by-ai/)
+- [Delving Into PubMed Records: How AI-Influenced Vocabulary has Transformed Medical Writing since ChatGPT - PMC](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC12679996/)
+- [Les tics de langage de ChatGPT - Daria décrypte l'IA](https://dariadecrypteia.substack.com/p/les-tics-de-langage-de-chatgpt)
+- [Comment Détecter l'Écriture IA : 15 Signes à Reconnaître (2026) - cours-ndrc.fr](https://cours-ndrc.fr/detecter-ecriture-ia-guide-2026/)
+- [40 tics IA qui trahissent ton écriture - Isma](https://redigeretvendreavecia.substack.com/p/40-marqueurs-linguistiques-qui-trahissent)
+- [Comment « dé-IA-iser » nos écrits pour éviter la disparition des particularités des langues ? - The Conversation](https://theconversation.com/comment-de-ia-iser-nos-ecrits-pour-eviter-la-disparition-des-particularites-des-langues-281811)
+- [Ability of AI detection tools and humans to accurately identify different forms of AI-generated written content - PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC12752165/)
 
 ### v2.9.0 - 2026-07-07
 
