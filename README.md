@@ -98,7 +98,7 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 
 > "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
-## 33 Patterns Detected (with Before/After Examples)
+## 35 Patterns Detected (with Before/After Examples)
 
 ### Content Patterns
 
@@ -141,6 +141,8 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 | 31 | **Manufactured punchlines / staccato drama** | "It had no preference. No prior. No nostalgia." | Use varied sentence lengths and concrete claims |
 | 32 | **Aphorism formulas** | "Symmetry is the language of trust" | Replace the formula with the actual claim |
 | 33 | **Conversational rhetorical openers** | "Honestly? It depends..." | Remove the fake-candid setup |
+| 34 | **Narrow vocabulary range** | "made a loud noise" | "let out a death-rattle clatter" |
+| 35 | **Flat sentence-length cadence** | Every sentence ~18-20 words, no variation | Mix short bursts with one long unspooling sentence |
 
 ### Communication Patterns
 
@@ -193,6 +195,7 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 
 ## Version History
 
+- **2.9.0** - Added patterns #34 (narrow vocabulary range / missing hapax legomena) and #35 (flat sentence-length cadence / low burstiness) from stylometric research; added a French-specific patterns section (typography, AI vocabulary, anglicized calques); added a scope note distinguishing genuine editing from detector-evasion tricks; enriched the personality section with two techniques grounded in the same research. 35 patterns total.
 - **2.8.2** - Replaced the full before/after example with a first-person Lisbon trip recap. The after now keeps the same topic, perspective, and rough length as the before while removing the AI tells without becoming clipped or slogan-like. No change to the 33 patterns.
 - **2.8.1** - Added cross-agent installation docs, optional Claude Code plugin packaging, and a compact secondhand-text false-positive guard. No change to the 33 patterns.
 - **2.8.0** - Added style/cadence patterns #31-33 for manufactured punchlines, aphorism formulas, and conversational rhetorical openers; expanded #20 to catch offer-to-continue chatbot closers. 33 patterns total.

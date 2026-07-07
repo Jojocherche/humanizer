@@ -1,13 +1,15 @@
 ---
 name: humanizer
-version: 2.8.2
+version: 2.9.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
-  inflated symbolism, promotional language, superficial -ing analyses, vague
-  attributions, em dash overuse, rule of three, AI vocabulary words, passive
-  voice, negative parallelisms, and filler phrases.
+  comprehensive "Signs of AI writing" guide, plus stylometric and psycholinguistic
+  research on human vs. AI text. Detects and fixes patterns including: inflated
+  symbolism, promotional language, superficial -ing analyses, vague attributions,
+  em dash overuse, rule of three, AI vocabulary words, passive voice, negative
+  parallelisms, filler phrases, flat sentence-length cadence (low burstiness),
+  narrow vocabulary range, and French-specific AI tells.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -77,6 +79,10 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **Vary your rhythm.** Short punchy sentences. Then longer ones that take their time getting where they're going. Mix it up.
 
 **Let some mess in.** Perfect structure feels algorithmic. Tangents, asides, and half-formed thoughts are human.
+
+**Reach for the one exact word.** A specific, slightly unusual word used correctly reads as human; a safe, generic one reads as AI. Stylometric studies find human text carries more hapax legomena - words used exactly once because they were the right word for one particular detail. Don't say "problem" when you mean "the timing belt is shredding itself."
+
+**Let sentences cluster, don't just alternate.** Real burstiness isn't "one short sentence, one long sentence, repeat" - it's three quick sentences in a row, then one that runs long enough to lose the thread, then quiet again. Researchers measure this as a burstiness score (variation in sentence length); human prose typically lands around 0.65-0.85, AI prose below 0.30. Check a paragraph's rhythm before finalizing: if every sentence is within a few words of the same length, that evenness is a tell on its own.
 
 ### Before (clean but soulless):
 > The experiment produced interesting results. The agents generated 3 million lines of code. Some developers were impressed while others were skeptical. The implications remain unclear.
@@ -520,6 +526,28 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > Whether it's worth the price depends on how often you'll use it.
 
 
+### 34. Narrow Vocabulary Range (Missing Hapax Legomena)
+
+**Problem:** Human writing on a specific topic reaches for rare, exact words tailored to that one detail - words that appear only once in the whole piece (hapax legomena) because they are precisely correct there. AI writing keeps vocabulary hovering in a narrow, "safe" mid-frequency band: broadly applicable, rarely precise. Stylometric research measures this directly as lower lexical diversity and fewer one-off words in AI text than in matched human samples. This is distinct from elegant variation (§11): that pattern is about cycling synonyms for the same referent; this one is about the overall vocabulary staying generic throughout instead of occasionally reaching for the specific, unusual term.
+
+**Before:**
+> The engine made a loud noise and the mechanic said it needed a repair before the car would run properly again.
+
+**After:**
+> The engine let out a death-rattle clatter, and the mechanic said the timing chain tensioner had given up.
+
+
+### 35. Flat Sentence-Length Cadence (Low Burstiness)
+
+**Problem:** Human prose clusters unevenly: a run of short sentences, then one long sentence that unspools through several clauses, then short again. AI prose, even when each sentence is well-formed on its own, tends to hover in a mid-length band sentence after sentence, producing smooth but suspiciously even rhythm. This is measurable (see burstiness score in PERSONALITY AND SOUL above) and is a tell independent of word choice - a paragraph can pass every vocabulary check above and still read as AI purely from its rhythm.
+
+**Before:**
+> The team reviewed the proposal in detail during the meeting and raised several points for discussion. The budget projections were examined closely, and stakeholders debated whether the timeline was realistic. Everyone in the room agreed that further analysis was needed before a final decision could be made.
+
+**After:**
+> The team spent an hour picking the proposal apart. Budget first. Then the timeline, which is where things got tense - half the room thought Q3 was fantasy, and by the time someone said "let's just table it," everyone looked relieved. Nothing got decided. That's fine for now.
+
+
 ## DETECTION GUIDANCE
 
 ### What NOT to flag (false positives)
@@ -543,6 +571,11 @@ A clean human writer can hit several of the patterns above without any AI involv
 When in doubt, look for **clusters** of tells, not isolated ones. A single em dash means nothing; em dashes plus rule-of-three plus *vibrant tapestry* plus a "Conclusion" section is a confession.
 
 
+### What this skill does not do
+
+Adversarial research has found detector-evasion methods that corrupt text at the character level - swapping letters for lookalike Unicode homoglyphs, inserting invisible characters, or running text through paraphrase models tuned purely to lower a detector score. None of that is in scope here. This skill only rewrites at the level of word choice, sentence structure, and rhythm, the same level a human editor works at, and every change should leave the text more readable, not less. If a "fix" only makes sense as a trick against a detector rather than an improvement a human reader would notice, it does not belong in the rewrite.
+
+
 ### Signs of human writing (preserve these)
 
 When you see these, lean toward leaving the prose alone — they are evidence of a real person writing, and over-editing will destroy what makes the piece sound human:
@@ -554,6 +587,45 @@ When you see these, lean toward leaving the prose alone — they are evidence of
 - **Variety in sentence length.** Real writing alternates short and long. AI writing tends toward an even, mid-length cadence.
 - **Genuine asides, parentheticals, or self-corrections.** "(I keep wanting to say 'almost' here, but it really was certain.)" Models rarely interrupt themselves like this.
 - **Edits made before November 30, 2022.** ChatGPT's public launch. Anything older than that is, with very rare exceptions, not AI-written.
+
+
+## FRENCH-SPECIFIC PATTERNS
+
+The patterns above transfer directly to French, but French has its own typographic conventions and its own set of overused AI vocabulary. Apply these in addition to, not instead of, the sections above when humanizing French text.
+
+### F1. Typography and Punctuation
+
+**Problem:** AI output in French defaults to English typographic habits instead of French ones: straight or English-style quotes instead of guillemets (« »), no space before double punctuation marks (`; : ! ?`), and periods used as thousands separators. French convention uses guillemets with a non-breaking space just inside them, a (thin) non-breaking space before `; : ! ?`, and a space (not a period) as the thousands separator with a comma as the decimal mark.
+
+**Before:**
+> Le directeur a déclaré: "Nous avons vendu 1.500.000 unités!" Cette annonce a surpris les investisseurs.
+
+**After:**
+> Le directeur a déclaré : « Nous avons vendu 1 500 000 unités ! » Cette annonce a surpris les investisseurs.
+
+
+### F2. Overused AI Vocabulary in French
+
+**Mots à surveiller :** au cœur de, un enjeu majeur/de taille, véritable, incontournable, façonner, s'inscrire dans une démarche de, à l'ère de, dans un monde en constante évolution, de plus en plus, il convient de noter que, en effet, par ailleurs, de surcroît, riche en, une pluralité de, indéniable, jouer un rôle clé/crucial, témoigner de, un tournant décisif, transformer en profondeur, un écosystème.
+
+**Problem:** These words cluster in AI-generated French the same way "delve," "tapestry," and "testament" cluster in AI-generated English (§7). Any one of them is ordinary French; several together, especially "au cœur de" or "un enjeu majeur" paired with "véritable," is the tell.
+
+**Before:**
+> La gastronomie occupe une place au cœur de l'identité lyonnaise et constitue un véritable enjeu majeur pour l'économie locale, façonnant durablement l'image de la ville à l'ère du tourisme mondialisé.
+
+**After:**
+> À Lyon, la gastronomie fait vivre une bonne partie de l'économie locale et attire une majorité des touristes qui visitent la ville.
+
+
+### F3. Anglicized Calques and Register Slippage
+
+**Problem:** AI-generated French sometimes borrows an English word's meaning rather than the correct French one ("réaliser" used to mean "se rendre compte," "supporter" used to mean "soutenir," "opportunité" used to mean "occasion"). It also tends to snap into a stiff, over-formal register (heavy nominalizations, systematic vouvoiement) even in contexts where a person would write more plainly.
+
+**Before:**
+> Elle a réalisé que l'opportunité était trop belle pour la laisser passer, et a décidé de supporter le projet dans son intégralité.
+
+**After:**
+> Elle s'est rendu compte que l'occasion était trop belle, et a décidé de soutenir le projet à fond.
 
 
 ---
@@ -620,3 +692,33 @@ Deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optiona
 This skill is based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. The patterns documented there come from observations of thousands of instances of AI-generated text on Wikipedia.
 
 Key insight from Wikipedia: "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
+
+
+## Changelog
+
+### v2.9.0 - 2026-07-07
+
+Weekly evolution run: synced with upstream (already current at commit `1b48564`), then added patterns from stylometric and psycholinguistic research on human vs. AI text.
+
+**Added:**
+- §34 Narrow Vocabulary Range (Missing Hapax Legomena) - low lexical diversity as a measurable AI tell
+- §35 Flat Sentence-Length Cadence (Low Burstiness) - quantified sentence-rhythm variation as a tell independent of word choice
+- Two new PERSONALITY AND SOUL techniques: reaching for the exact/rare word, and letting sentence rhythm cluster rather than merely alternate
+- "What this skill does not do" note distinguishing genuine editing from character-level detector-evasion tricks (homoglyphs, invisible characters, evasion-tuned paraphrasers)
+- New FRENCH-SPECIFIC PATTERNS section (F1 typography/punctuation, F2 overused AI vocabulary in French, F3 anglicized calques and register slippage)
+
+**Sources consulted:**
+- [StyloAI: Distinguishing AI-Generated Content with Stylometric Analysis](https://arxiv.org/html/2405.10129v1)
+- [Distinguishing AI-Generated and Human-Written Text Through Psycholinguistic Analysis](https://arxiv.org/html/2505.01800v1)
+- [Stylometric detection of AI-generated texts: evidence from human and machine-written essays - Oxford Academic, Digital Scholarship in the Humanities](https://academic.oup.com/dsh/advance-article/doi/10.1093/llc/fqag064/8714041)
+- [Stylometry can reveal artificial intelligence authorship, but humans struggle - PLOS One](https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0335369)
+- [Stylometric comparisons of human versus AI-generated creative writing - Nature, Humanities and Social Sciences Communications](https://www.nature.com/articles/s41599-025-05986-3)
+- [Stylometry recognizes human and LLM-generated texts in short samples - ScienceDirect](https://www.sciencedirect.com/science/article/abs/pii/S0957417425026181)
+- [Text Authorship Attribution: Stylometric Insights into Human and LLM-Generated Text - ACM CODS-COMOD 2025](https://dl.acm.org/doi/10.1145/3703323.3703712)
+- [What Is Burstiness in AI Detection? - thehumanizeai.pro](https://thehumanizeai.pro/articles/what-is-burstiness-ai-detection-explained)
+- [How AI Detectors Work: Perplexity & Burstiness Explained - GPTZero](https://gptzero.me/news/perplexity-and-burstiness-what-is-it/)
+- [Full article: Comparative linguistic analysis framework of human-written vs. machine-generated text](https://www.tandfonline.com/doi/full/10.1080/09540091.2025.2507183)
+- [Detector-Evasive LLM Paraphrasing via Constrained Policy Optimization](https://arxiv.org/pdf/2606.00392)
+- [MASH: Evading Black-Box AI-Generated Text Detectors via Style Humanization](https://arxiv.org/pdf/2601.08564)
+- [1.3: Differences between French and English - Humanities LibreTexts](https://human.libretexts.org/Courses/Palomar_College/FREN_140:_Basic_French_Pronunciation/01:_Introduction/1.03:_Differences_between_French_and_English)
+- [Written English Vs. Written French: A Comparison - italki](https://www.italki.com/en/article/686/written-english-vs-written-french-a-comparison)
