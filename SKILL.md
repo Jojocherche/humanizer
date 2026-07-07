@@ -1,13 +1,15 @@
 ---
 name: humanizer
-version: 2.8.2
+version: 2.9.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide. Detects and fixes patterns including:
+  comprehensive "Signs of AI writing" guide, plus 2026 stylometric and
+  narrative-structure research. Detects and fixes patterns including:
   inflated symbolism, promotional language, superficial -ing analyses, vague
   attributions, em dash overuse, rule of three, AI vocabulary words, passive
-  voice, negative parallelisms, and filler phrases.
+  voice, negative parallelisms, filler phrases, predictable narrative/argument
+  structure, and French-specific AI tics.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -77,6 +79,8 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **Vary your rhythm.** Short punchy sentences. Then longer ones that take their time getting where they're going. Mix it up.
 
 **Let some mess in.** Perfect structure feels algorithmic. Tangents, asides, and half-formed thoughts are human.
+
+**Let your vocabulary drift.** A 2025 stylometric comparison of human and AI-generated creative writing (using Burrows' Delta) found LLM output clusters tightly around a narrow, evenly-replenished vocabulary, while human authors show much wider lexical spread from piece to piece, even within the same genre. Don't manufacture variety for its own sake, and don't swap in a fancier synonym just to avoid repeating a word - real writers reuse their own pet words unevenly, and that unevenness is itself a human signal.
 
 ### Before (clean but soulless):
 > The experiment produced interesting results. The agents generated 3 million lines of code. Some developers were impressed while others were skeptical. The implications remain unclear.
@@ -520,6 +524,52 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > Whether it's worth the price depends on how often you'll use it.
 
 
+## STRUCTURAL AND NARRATIVE PATTERNS
+
+### 34. Narrative and Argument-Structure Predictability
+
+**Problem:** Even after every sentence-level tell above is scrubbed, AI-written narratives and arguments keep a distinctive macro-shape. A 2026 study (StoryScope, Russell et al., arXiv:2604.03136) trained a classifier on discourse-level structure alone - plot shape, subplot resolution, how themes get stated, how emotional beats land - and hit 93.2% accuracy separating AI from human fiction across 61,608 stories. After editing the same stories to remove every stylistic tell, accuracy barely moved (93.9%): the structure itself is the tell. The same shape shows up in non-fiction argument: a thesis stated up front, every counterargument raised only to be neatly dismissed, every thread tied off by the end, sections symmetric in length. Real human storytelling and argument leave loose ends, revisit a point out of order, or let a minor thread trail off unresolved.
+
+**Before (fiction):**
+> Maya feared she would fail the exam. But through hard work and her mentor's guidance, she overcame her doubts and passed with flying colors, proving that perseverance triumphs over fear.
+
+**After:**
+> Maya was sure she'd fail. She didn't pass with flying colors, either - she scraped by with a C-plus, and to this day she isn't sure whether it was the extra tutoring or the proctor letting her keep working ten minutes past time.
+
+**Before (argument):**
+> Critics argue that remote work reduces collaboration. However, this concern is unfounded: video tools and asynchronous documentation have fully closed the gap, making remote teams just as connected as in-office ones.
+
+**After:**
+> Critics say remote work kills collaboration. True for some teams, not others - ours got worse at hallway problem-solving and better at writing things down, which is its own tradeoff nobody warned us about.
+
+
+## PATTERNS SPÉCIFIQUES AU FRANÇAIS
+
+Les patterns 1-33 ci-dessus s'appliquent au français, mais les modèles francophones ont aussi leurs propres tics lexicaux et structurels.
+
+### 35. Vocabulaire IA et ouvertures clichées
+
+**Mots et expressions à surveiller:** crucial, indispensable, essentiel, fondamental, captivant (adjectifs); permettre de, garantir, assurer, offrir, favoriser, optimiser, répondre aux besoins, comprendre les enjeux (verbes); par ailleurs, de plus, ainsi, néanmoins, en effet (connecteurs sur-utilisés); « dans le monde actuel », « dans cette optique », « dans ce cadre », « Dans un monde où... » (ouvertures clichées).
+
+**Problème:** Les modèles francophones réutilisent un stock réduit de connecteurs et d'ouvertures qui sonnent creux à la lecture, en particulier l'ouverture « Dans un monde où [contexte général], il est essentiel de... ».
+
+**Avant:**
+> Dans un monde où la technologie évolue rapidement, il est crucial pour les entreprises de s'adapter. Cette transformation permet d'optimiser les processus et de répondre aux besoins des clients.
+
+**Après:**
+> Les entreprises qui n'ont pas revu leurs outils depuis cinq ans perdent du terrain. Un processus plus simple, c'est moins d'allers-retours avec le service client.
+
+### 36. Empilement de deux adjectifs (tic structurel)
+
+**Problème:** Les IA insèrent systématiquement deux adjectifs coordonnés là où un seul suffirait (« une approche innovante et pertinente », « un projet ambitieux et structurant »), ce qui alourdit chaque phrase de la même façon. Ce tic existe aussi en anglais (« a vibrant, transformative approach ») mais revient particulièrement souvent dans les textes IA en français, sur des textes longs (1000+ mots) où il devient répétitif.
+
+**Avant:**
+> Ce projet ambitieux et structurant repose sur une approche innovante et pertinente, portée par une équipe engagée et compétente.
+
+**Après:**
+> Ce projet repose sur une idée simple: automatiser la saisie. L'équipe qui l'a monté connaît le sujet depuis quinze ans.
+
+
 ## DETECTION GUIDANCE
 
 ### What NOT to flag (false positives)
@@ -539,6 +589,7 @@ A clean human writer can hit several of the patterns above without any AI involv
 - **Unsourced claims.** Most of the web is unsourced. Lack of citations doesn't prove anything.
 - **Correct, complex formatting.** Visual editors and templates produce clean output without any AI.
 - **Secondhand text.** Do not rewrite watched phrases inside quotations, titles, proper names, or examples where the phrase is being discussed rather than used.
+- **Naturally low-burstiness genres.** Legal documents, scientific abstracts, and financial disclosures are structurally low-burstiness (uniform sentence length and rhythm) regardless of who wrote them. 2026 research from Pindrop and the Authors Guild found this creates a structural false-positive problem: the more disciplined a human writer's technical style, the more it can resemble AI output. Don't force artificial rhythm variation into a genre where uniformity is the professional norm.
 
 When in doubt, look for **clusters** of tells, not isolated ones. A single em dash means nothing; em dashes plus rule-of-three plus *vibrant tapestry* plus a "Conclusion" section is a confession.
 
@@ -551,7 +602,8 @@ When you see these, lean toward leaving the prose alone — they are evidence of
 - **Mixed feelings and unresolved tension.** "I think this is mostly good, but it bothers me, and I can't fully explain why." LLMs default to clean takes.
 - **Dated, era-bound references.** Slang, memes, or in-jokes that map to a specific year and subculture. Models lag by a year or more.
 - **First-person editorial choices the writer can defend.** If the writer can explain *why* they made a particular cut or used a particular word, that's a strong human signal.
-- **Variety in sentence length.** Real writing alternates short and long. AI writing tends toward an even, mid-length cadence.
+- **Variety in sentence length.** Real writing alternates short and long. AI writing tends toward an even, mid-length cadence. As a rough numeric anchor, human prose typically scores 0.65-0.85 on common burstiness metrics (variation in sentence length and rhythm); most detectors flag text scoring below 0.30. Use this as a sanity check, not a target to hit mechanically - see the false-positive note above for genres where low burstiness is normal.
+- **Wide lexical spread across the whole piece.** Beyond any single sentence, look at word choice over the full text: humans reuse pet words unevenly and let vocabulary drift piece to piece, while LLM output stays evenly consistent (see the vocabulary-drift note in PERSONALITY AND SOUL).
 - **Genuine asides, parentheticals, or self-corrections.** "(I keep wanting to say 'almost' here, but it really was certain.)" Models rarely interrupt themselves like this.
 - **Edits made before November 30, 2022.** ChatGPT's public launch. Anything older than that is, with very rare exceptions, not AI-written.
 
@@ -620,3 +672,25 @@ Deliver the draft, the brief "still-AI" bullets, the final rewrite, and (optiona
 This skill is based on [Wikipedia:Signs of AI writing](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing), maintained by WikiProject AI Cleanup. The patterns documented there come from observations of thousands of instances of AI-generated text on Wikipedia.
 
 Key insight from Wikipedia: "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
+
+
+## Changelog
+
+### v2.9.0 - 2026-07-07
+
+Added 3 new patterns and a new language-specific section, based on a weekly academic research pass:
+
+- **#34 Narrative and Argument-Structure Predictability** (new "STRUCTURAL AND NARRATIVE PATTERNS" section) - macro-level plot/argument shape survives sentence-level style edits.
+- **#35 Vocabulaire IA et ouvertures clichées** and **#36 Empilement de deux adjectifs** (new "PATTERNS SPÉCIFIQUES AU FRANÇAIS" section) - French-specific AI tics not previously covered.
+- Enriched PERSONALITY AND SOUL with a note on lexical drift / vocabulary breadth across a full piece.
+- Enriched DETECTION GUIDANCE with a quantified burstiness anchor (0.65-0.85 human, <0.30 flagged) and a false-positive note for naturally low-burstiness technical genres (legal, scientific, financial).
+
+**Sources consulted:**
+- Russell et al., "StoryScope: Investigating idiosyncrasies in AI fiction," arXiv:2604.03136 (2026)
+- "Stylometric comparisons of human versus AI-generated creative writing," *Humanities and Social Sciences Communications* (Nature, 2025) - https://www.nature.com/articles/s41599-025-05986-3
+- "Human Variability vs. Machine Consistency: A Linguistic Analysis of Texts Generated by Humans and Large Language Models," arXiv:2412.03025
+- "MASH: Evading Black-Box AI-Generated Text Detectors via Style Humanization," arXiv:2601.08564 (2026)
+- GPTZero, "What is perplexity & burstiness for AI detection?" - https://gptzero.me/news/perplexity-and-burstiness-what-is-it/
+- TechTimes, "AI Text Detectors Flag Polished Human Writing as AI: New Studies Expose a Built-In Paradox" (2026-06-26)
+- TechTimes, "AI Fiction Detection Reaches 93% on Structure Alone: Style Edits Can No Longer Fool It" (2026-07-05)
+- Loumina, "Reconnaître un texte d'IA: les tics de ChatGPT"; Redacteur.com, "Comment éviter les tics de langage de ChatGPT?"; IntellectuaLead, "Les Mots et Expressions les Plus Surutilisés par ChatGPT" (French AI-tic roundups, 2026)
