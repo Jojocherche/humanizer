@@ -55,6 +55,48 @@ covered).
 | v2.10.0 | 2026-07-07 | Comment Détecter l'Écriture IA : 15 Signes (2026) — cours-ndrc.fr/detecter-ecriture-ia-guide-2026 | blog, LOW CONFIDENCE — pattern ok, stat unverified | "dans le paysage de" calque |
 | v2.10.0 | 2026-07-07 | Quand l'humain parle comme ChatGPT — siecledigital.fr, reporting Max Planck Institute for Human Development study | news + academic corpus study | human vocabulary contamination |
 
+**Merged in from `.claude/HUMANIZER-ROUTINE-LOG.md` (the parallel "main run" that produced v2.10.0 directly on main, reconciled into v2.11.0 on 2026-07-08):**
+
+| Run (version) | Date | Source | Venue/type | Topic |
+|---|---|---|---|---|
+| v2.10.0 main-run | 2026-07-07 | Does AI Homogenize Student Thinking? Structural Convergence in AI-Augmented Essays — arxiv.org/abs/2603.21228 | arXiv | paragraph-cohesion uniformity |
+| v2.10.0 main-run | 2026-07-07 | Contrasting Linguistic Patterns in Human and LLM-Generated News Text — arxiv.org/abs/2308.09067 | arXiv | syntactic uniformity |
+| v2.10.0 main-run | 2026-07-07 | Contrasting Linguistic Patterns... — link.springer.com/article/10.1007/s10462-024-10903-2 | Artificial Intelligence Review, Springer (Q1) | syntactic uniformity |
+| v2.10.0 main-run | 2026-07-07 | Benchmarking Linguistic Diversity of Large Language Models — arxiv.org/abs/2412.10271 | arXiv / TACL | lexical diversity |
+| v2.10.0 main-run | 2026-07-07 | A linguistic comparison between human- and AI-generated content — cell.com/iscience, S2589-0042(26)00351-2 | iScience, Cell Press (2026) | syntactic uniformity, cross-language |
+| v2.10.0 main-run | 2026-07-07 | Narrative coherence in neural language models — pmc.ncbi.nlm.nih.gov/articles/PMC11998594 | Frontiers in Psychology (2025) | discourse coherence (WEAK, 1 source) |
+| v2.10.0 main-run | 2026-07-07 | RAID: A Shared Benchmark for Robust Evaluation of Machine-Generated Text Detectors — arxiv.org/abs/2405.07940 | arXiv / ACL 2024 | detector benchmark landscape |
+| v2.10.0 main-run | 2026-07-07 | Pangram: Human-in-the-Loop Detection of AI-Generated Text — arxiv.org/pdf/2402.14873 | arXiv | detector benchmark landscape |
+| v2.10.0 main-run | 2026-07-07 | GPT detectors are biased against non-native English writers — pmc.ncbi.nlm.nih.gov/articles/PMC10382961 | PMC / arXiv 2304.02819 | false-positive bias, non-native writers |
+| v2.10.0 main-run | 2026-07-07 | The Misclassification of Autistic Writing as AI-Generated — researchgate.net/publication/394678751 | ResearchGate | false-positive bias, neurodivergent writers |
+| v2.10.0 main-run | 2026-07-07 | Benchmark of Stylistic Variation in LLM-Generated Texts — arxiv.org/abs/2509.10179 | arXiv | stylistic variation |
+| v2.10.0 main-run | 2026-07-07 | Catch Me If You Can? Not Yet: LLMs Still Struggle to Imitate Implicit Writing Styles — arxiv.org/abs/2509.14543 | arXiv | style imitation limits |
+| v2.10.0 main-run | 2026-07-07 | Self-Repetition in Abstractive Neural Summarizers — aclanthology.org/2022.aacl-short.42 | ACL Anthology (2022) | n-gram repetition |
+| v2.10.0 main-run | 2026-07-07 | Standardizing the Measurement of Text Diversity — arxiv.org/pdf/2403.00553 | arXiv | text diversity metrics |
+| v2.10.0 main-run | 2026-07-07 | From 'May' to 'Is': Certainty Distortion in Language Model Rewriting — arxiv.org/pdf/2606.07951 | arXiv | certainty/hedging distortion |
+| v2.10.0 main-run | 2026-07-07 | AuTexTification shared task, IberLEF — arxiv.org/abs/2309.11285 | arXiv | Spanish detection benchmark |
+| v2.10.0 main-run | 2026-07-07 | MULTITuDE: Multilingual Machine-Generated Text Detection Benchmark — arxiv.org/pdf/2310.13606 | arXiv | multilingual detection |
+| v2.10.0 main-run | 2026-07-07 | "Estas palabras y frases..." — genbeta.com | tech-journalism blog | Spanish AI vocabulary |
+| v2.10.0 main-run | 2026-07-07 | "5 patrones de escritura IA..." — ecosistemastartup.com | tech-journalism blog | Spanish AI patterns |
+| v2.10.0 main-run | 2026-07-07 | RAE - Cuándo se usa cada tipo de comillas — rae.es | reference (Real Academia Española) | Spanish typography |
+
+**Frontiers not yet done (from the main-run log, still open):**
+- Discourse coherence / entity-grid AI vs human: only 1 weak source (PMC11998594). Dig ACL Anthology + entity-grid detection papers specifically. Do NOT add to skill until 2+ solid sources agree.
+- Round-number / numeric-vagueness bias ("over 50%" vs "53.7%"): UNCONFIRMED, no direct study found. Either find a real study testing this exact claim, or drop the idea permanently.
+- Cross-lingual AI lexical shift paper, arXiv 2605.25358 ("AI-Associated Lexical Shifts Across 34 Languages"): hit 403 twice. Try Semantic Scholar mirror, Google cache, or author's personal site. Could upgrade Spanish AND unlock German/Italian/Portuguese sections.
+- AuTexTification/IberLEF (2309.11285) + MULTITuDE (2310.13606): hit 403 on full text. Retry via abstract page + Semantic Scholar. Goal: upgrade Spanish S2 from "moderate" to "strong" evidence.
+- German, Italian, Portuguese sections: zero research done. Natural next expansion once Spanish evidence is solid; same 3-part structure (typography, AI vocab, calques) probably transfers.
+- Formal paragraph-burstiness metric: no published metric name exists yet (unlike sentence burstiness, which has the named 0.65-0.85 range). Either find one or note the paragraph-uniformity heuristic is qualitative, not a named score.
+- Detector false-positive research: only 2 groups covered (non-native, neurodivergent). Check dialect-specific bias (AAVE, regional English) and age-related bias in Q1 journals next.
+- Search SEPLN/Procesamiento del Lenguaje Natural directly for Spanish, and Langages / Journal of French Language Studies / Lidil directly for French, instead of relying on arXiv/English aggregators to surface them.
+- Test/benchmark sites: only read ABOUT these tools, never ran text through them. Could add a manual step: run 2-3 skill Before/After pairs through 1-2 public detector free tiers, log the score delta as a lightweight validity check (not for evasion-tuning).
+
+**Rejected candidates (do not re-propose without new evidence):**
+- "AI prefers round numbers over precise figures" - no direct academic study found.
+- Discourse coherence as a standalone AI tell - only one modest-effect-size study; wait for 2+ agreeing sources.
+
+**Search queries already burned (main-run log; vary phrasing, don't rerun verbatim):** paragraph length burstiness AI detection 2025 2026 / syntactic complexity AI generated text stylometry / discourse coherence AI human text detection research / dependency parse AI text vs human text linguistics study / AI detector accuracy benchmark study 2026 / GPTZero Originality.ai Copyleaks academic evaluation / AI text detector false positive non-native speakers research / stylometric humanization LLM output 2026 arXiv / Pangram Winston AI detector research paper / AI generated Spanish text tells linguistics 2026 / ChatGPT Spanish overused vocabulary stylometric / anglicismos calcos IA texto generado español / revista Q1 Q2 español procesamiento lenguaje natural detección texto generado IA 2025 2026 / AI generated text round numbers bias linguistics / LLM numeric hedging vagueness text generation research 2025 2026 / LLM text redundancy repetition n-gram self-similarity detection research / AI generated text redundant restatement stylometric study 2025 2026
+
 **Logged but not yet used (queued for a future run):**
 - When AI Settles Down (late-text volatility decay in token surprisal) — arxiv.org/abs/2601.04833
 - DivEye: Diversity Boosts AI-Generated Text Detection — arxiv.org/abs/2509.18880

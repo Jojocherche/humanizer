@@ -14,6 +14,24 @@ to main. NEVER open a PR unless user explicitly asked this run. if last
 run's commit is still unmerged on the branch, say so in the recap — do not
 silently pile up more unmerged commits without flagging it.
 
+## RULE 1B — CHECK FOR A PARALLEL RUN BEFORE WRITING ANYTHING
+this routine has run more than once in the same week on different branches
+(one running session pushed straight to main, another ran on the PR branch,
+neither saw the other — real incident, 2026-07-08, cost a merge conflict and
+a manual reconciliation pass). Before starting research or writing:
+```
+git fetch origin main <this-branch>
+git log --oneline main..<this-branch>          # branch ahead of main?
+git log --oneline <this-branch>..main          # main ahead of branch? <- if non-empty, ANOTHER RUN HAPPENED
+```
+if main has commits the branch doesn't (and they look like this same routine
+— check for the `feat(humanizer): weekly evolution` commit message pattern),
+STOP before adding new content. Read what that commit already added, then
+either (a) rebase/merge it in and build only genuinely new material on top,
+or (b) if this run is a PR-babysitting/conflict-fix pass rather than a fresh
+weekly run, reconcile the two sets of additions instead of writing a third.
+Never assume you're the only session touching this repo this week.
+
 ## RULE 2 — SYNC UPSTREAM FIRST
 ```
 git remote add upstream https://github.com/blader/humanizer.git   # ok if exists
@@ -116,3 +134,15 @@ them.
   press coverage (The Conversation, Siècle Digital) of academic work instead
   of the journals themselves. Next run: spend the francophone-archive slot
   on HAL directly, not another general web sweep.
+- (reconciliation pass, 2026-07-08) two sessions ran this same weekly routine
+  in the same week without either knowing about the other: one pushed
+  straight to main, one worked on the PR branch. Both wrote genuinely good,
+  non-overlapping patterns, but both called themselves "v2.10.0," both
+  invented their own separate self-improvement scaffold (`.routine/` vs
+  `.claude/HUMANIZER-ROUTINE-LOG.md`), and the PR that was supposed to bring
+  them together showed up conflicted. Fixed by merging both pattern sets
+  into v2.11.0, renumbering to avoid collisions, and consolidating the two
+  scaffolds into this one. Added RULE 1B above so the next run checks for
+  this before writing anything instead of after. Lesson: "don't repeat past
+  work" only works if there's exactly one past to check against — assume
+  there might be two.
