@@ -1,3 +1,5 @@
+> CONSOLIDATED 2026-07-08 (v2.11.0 reconciliation): this file and `.routine/` were created independently by two parallel runs the same week and collided in a merge conflict. Going forward, `.routine/PLAYBOOK.md` + `.routine/sources-log.md` are canonical - this file's unique content (frontiers, rejected candidates, burned queries) has been copied into `.routine/sources-log.md`. Kept here, unmodified, for history. Do not add new rows here; add them to `.routine/` instead.
+
 # ROUTINE STATE. WEEKLY HUMANIZER SKILL EVOLUTION. READ FIRST. APPEND ONLY. NEVER DELETE ROWS.
 
 PURPOSE. this file = memory across weekly runs. goal: each run go DEEPER, not repeat old ground. read RUN LOG + COVERED + FRONTIERS before searching anything.

@@ -1,16 +1,19 @@
 ---
 name: humanizer
-version: 2.10.0
+version: 2.11.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
-  comprehensive "Signs of AI writing" guide, plus stylometric and psycholinguistic
-  research on human vs. AI text. Detects and fixes patterns including: inflated
-  symbolism, promotional language, superficial -ing analyses, vague attributions,
-  em dash overuse, rule of three, AI vocabulary words, passive voice, negative
-  parallelisms, filler phrases, flat sentence-length cadence (low burstiness),
-  narrow vocabulary range, uniform paragraph architecture, syntactic uniformity,
-  redundant restatement, and French- and Spanish-specific AI tells.
+  comprehensive "Signs of AI writing" guide, plus stylometric, psycholinguistic,
+  and discourse-analysis research on human vs. AI text. Detects and fixes
+  patterns including: inflated symbolism, promotional language, superficial
+  -ing analyses, vague attributions, em dash overuse, rule of three, AI
+  vocabulary words, passive voice, negative parallelisms, filler phrases, flat
+  sentence-length cadence (low burstiness), narrow vocabulary range, uniform
+  paragraph architecture, syntactic uniformity, redundant restatement,
+  shell-noun overuse, missing reader-engagement markers, over-resolved
+  narrative ambiguity, under-subordinated clause packing, and French- and
+  Spanish-specific AI tells including regional-register flattening.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -82,6 +85,8 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **Let some mess in.** Perfect structure feels algorithmic. Tangents, asides, and half-formed thoughts are human.
 
 **Reach for the one exact word.** A specific, slightly unusual word used correctly reads as human; a safe, generic one reads as AI. Stylometric studies find human text carries more hapax legomena - words used exactly once because they were the right word for one particular detail. Don't say "problem" when you mean "the timing belt is shredding itself."
+
+**Talk to the reader.** Ask a real question. Address them as "you." Drop in a parenthetical aside. Corpus studies of argumentative essays find human writers use direct reader-engagement moves - rhetorical questions, personal asides, second-person address - at several times the rate AI text does; AI argumentation is grammatically clean but rhetorically flat, asserting conclusions instead of building them with the reader. See §40 below.
 
 **Let sentences cluster, don't just alternate.** Real burstiness isn't "one short sentence, one long sentence, repeat" - it's three quick sentences in a row, then one that runs long enough to lose the thread, then quiet again. Researchers measure this as a burstiness score (variation in sentence length); human prose typically lands around 0.65-0.85, AI prose below 0.30. Check a paragraph's rhythm before finalizing: if every sentence is within a few words of the same length, that evenness is a tell on its own.
 
@@ -179,6 +184,8 @@ Avoiding AI patterns is only half the job. Sterile, voiceless writing is just as
 **High-frequency AI words:** Actually, additionally, align with, crucial, delve, emphasizing, enduring, enhance, fostering, garner, highlight (verb), interplay, intricate/intricacies, key (adjective), landscape (abstract noun), pivotal, showcase, tapestry (abstract noun), testament, underscore (verb), valuable, vibrant
 
 **Problem:** These words appear far more frequently in post-2023 text. They often co-occur.
+
+**2026 caveat:** A large-scale study of academic YouTube lecture transcripts found human use of several of these words (meticulous, delve, adept, realm, boast) rose up to 51% in the 18 months after ChatGPT's release - people are absorbing the tell into their own speech. Treat a vocabulary cluster as corroborating evidence, not standalone proof, and weigh it alongside the structural patterns (§34-42), which are harder to pick up unconsciously.
 
 **Before:**
 > Additionally, a distinctive feature of Somali cuisine is the incorporation of camel meat. An enduring testament to Italian colonial influence is the widespread adoption of pasta in the local culinary landscape, showcasing how these dishes have integrated into the traditional diet.
@@ -598,7 +605,57 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > The gain was smallest on the noisy-label subset, which suggests the model still leans on clean examples more than we'd like.
 
 
+### 39. Shell-Noun Anaphoric Reference Overuse
+
+**Words to watch:** This approach, this study, this analysis, this dissertation, this finding, this framework - repeated as the subject to refer back to prior content, often paired with a contentless intensifier (intricately explores, demonstrates, highlights).
+
+**Problem:** AI text carries reference forward by restarting sentences with an abstract "shell noun" instead of a pronoun, a more specific restatement, or by combining the two sentences into one. One shell noun is normal writing; three or four in a row, each reintroducing the same referent from scratch, is a tell.
+
+**Before:**
+> This dissertation intricately explores the relationship between soil pH and crop yield. This approach demonstrates that acidity above 6.5 reduces nitrogen uptake. This finding highlights the need for targeted lime application.
+
+**After:**
+> The dissertation looks at how soil pH affects crop yield and finds that acidity above 6.5 reduces nitrogen uptake, which points toward targeted lime application rather than blanket treatment.
+
+
+### 40. Missing Reader-Engagement Markers (Flat Rhetorical Stance)
+
+**Problem:** In argumentative and essay-style writing, AI text is grammatically clean but rhetorically flat: it reports and asserts but rarely turns to the reader. It leans on generic evaluative words (crucial, important) and endophoric markers (as noted above) instead of rhetorical questions, direct address, or personal asides. Human argumentative writing builds the case with the reader instead of just handing over conclusions.
+
+**Before:**
+> Remote work has both benefits and drawbacks. It offers flexibility but can reduce team cohesion. Companies must weigh these factors carefully when deciding on policy.
+
+**After:**
+> Remote work sounds like a clear win until you try building a team that has never shared a room. Sure, the flexibility is real - nobody misses the commute. But how do you replace the conversation that used to happen walking to the coffee machine? That's the tradeoff most policies never name.
+
+
+### 41. Over-Resolved Narrative Ambiguity (Fiction)
+
+**Problem:** In creative writing, AI-generated fiction tends to over-explain motivation, resolve moral questions cleanly, and narrate events in strict, causally-spelled-out order. Human fiction leaves more implicit: motivations you infer, endings that stop on an unresolved beat, questions the story doesn't answer for you. This is a structural, narrative-level tell, and it survives line-level editing - fixing diction and cutting AI vocabulary does not remove it.
+
+**Before:**
+> Maria stared at the letter for a long time. She realized that forgiveness was the only way forward, even if her sister never asked for it. She folded the letter, and for the first time in years, she felt at peace.
+
+**After:**
+> Maria read the letter twice, then a third time, then put it in the drawer with the others. She didn't write back. She didn't throw it away either.
+
+
+### 42. Sequential Simple Sentences Instead of Subordination
+
+**Problem:** Distinct from flat sentence-length cadence (§35, about length variance): this is about clause architecture. AI text often spreads related pieces of information - a method, a variable, a result - across a run of short, separate simple sentences instead of integrating them into one sentence with a subordinate or relative clause. The result reads as plain but is often less information-dense, and sometimes less readable, than the human sentence it is standing in for.
+
+**Before:**
+> The team tested three algorithms. Each algorithm was run on the same dataset. Algorithm B produced the lowest error rate. This suggests it is the best choice for production.
+
+**After:**
+> Of the three algorithms tested on the same dataset, Algorithm B produced the lowest error rate, which makes it the strongest candidate for production.
+
+
 ## DETECTION GUIDANCE
+
+### Detection is layered, not a single tell
+
+A 2026 rapid review of 40 empirical studies groups AI-vs-human cues into five families: surface (lexical/syntactic - most of §7-§35 above), discourse/pragmatic (stance and engagement, §40 and the metadiscourse notes below), epistemic/content (grounding, lived experience, specific detail), predictability (perplexity/burstiness, §35), and provenance (watermarking, out of scope here). No single family is reliable alone; reliable judgment comes from several independent families agreeing. When one tell is present and the others are absent, be skeptical of your own read.
 
 ### What NOT to flag (false positives)
 
@@ -626,6 +683,10 @@ When in doubt, look for **clusters** of tells, not isolated ones. A single em da
 ### What this skill does not do
 
 Adversarial research has found detector-evasion methods that corrupt text at the character level - swapping letters for lookalike Unicode homoglyphs, inserting invisible characters, or running text through paraphrase models tuned purely to lower a detector score. None of that is in scope here. This skill only rewrites at the level of word choice, sentence structure, and rhythm, the same level a human editor works at, and every change should leave the text more readable, not less. If a "fix" only makes sense as a trick against a detector rather than an improvement a human reader would notice, it does not belong in the rewrite.
+
+Research on evasion attacks backs this up: text optimized purely to fool a detector still carries its underlying stylistic fingerprint, which few-shot stylistic detectors pick back up, and any distribution shift that a paraphraser manages to hide re-emerges once several documents from the same source are analyzed together. Word-level disguises are fragile. Fixing the structural patterns above (shell nouns, engagement markers, narrative resolution, clause packing, sentence rhythm) is what actually changes the writing, not just the readout of a detector run once.
+
+A related trend worth knowing: newer, more heavily aligned models are not automatically harder to catch. Comparative work across model generations found that RLHF-style alignment training tends to narrow lexical and syntactic diversity further, not widen it - so diversity-based signals (§34, §37, §42) may get more discriminative over model generations, not less, contrary to the intuitive assumption that each new model generation writes more like a person.
 
 
 ### Signs of human writing (preserve these)
@@ -678,6 +739,28 @@ The patterns above transfer directly to French, but French has its own typograph
 
 **After:**
 > Elle s'est rendu compte que l'occasion était trop belle, et a décidé de soutenir le projet à fond.
+
+
+### F4. Spatial-Metaphor Introductions
+
+**Problem:** French AI output has picked up the French calque of the English "in the ever-evolving landscape of X" opener (§1): "Dans le paysage [actuel/moderne/contemporain] de..." used as a stock way to open a section. It is the French instantiation of the same tell already flagged in §1, not a separate vocabulary list - the fix is the same: name the actual subject instead of framing it inside a scenery metaphor.
+
+**Before:**
+> Dans le paysage actuel de l'intelligence artificielle, les entreprises doivent s'adapter rapidement pour rester compétitives.
+
+**After:**
+> Les entreprises qui utilisent l'IA doivent revoir leurs processus tous les six mois pour rester compétitives.
+
+
+### F5. Regional-Register Flattening
+
+**Problem:** AI French defaults to a standardized, metropolitan (Hexagonal) register even when the source text carries a regional voice - Québécois, Belgian, Swiss, or African French. It strips out regional lexicon, syntax, and idiom in favor of "neutral" standard French. When humanizing French text that has, or should have, a regional voice, do not flatten it toward the metropolitan default; preserve regionalisms as a human signal, the same way an English editor preserves British versus American spelling and idiom rather than silently converting one to the other.
+
+**Before (over-corrected to metropolitan French):**
+> J'ai fait du shopping toute la journée et j'étais épuisée. J'ai décidé de dîner tôt et de me coucher.
+
+**After (regional voice restored):**
+> J'ai magasiné toute la journée pis j'étais brûlée. J'ai décidé de souper de bonne heure pis de me coucher.
 
 
 ## SPANISH-SPECIFIC PATTERNS
@@ -789,9 +872,56 @@ Key insight from Wikipedia: "LLMs use statistical algorithms to guess what shoul
 
 ## Changelog
 
-### v2.10.0 - 2026-07-07
+### v2.11.0 - 2026-07-08
+
+Two weekly-evolution runs happened in parallel this week, on separate branches, without either seeing the other's work: one landed 3 new patterns plus a Spanish section directly on `main` (recorded below as v2.10.0, "main run"), the other landed 4 new patterns plus two French additions on this PR branch (recorded below as v2.10.0, "branch run"). Both are additive and non-contradictory - no pattern in one duplicates or conflicts with a pattern in the other - so this release merges both in full rather than picking one. Renumbered the branch run's §36-39 to §39-42 so all eight new patterns coexist without collisions, and fixed the internal cross-references that pointed at the old numbers. No content from either run was dropped.
+
+Going forward, the two competing routine-state files this collision produced (`.routine/` from the branch run, `.claude/HUMANIZER-ROUTINE-LOG.md` from the main run) are both kept for now; see the note in `.routine/PLAYBOOK.md` for the plan to consolidate them so this doesn't happen again.
+
+**Sections renumbered (content unchanged, only the number moved):** §36 Shell-Noun Anaphoric Reference Overuse -> §39. §37 Missing Reader-Engagement Markers -> §40. §38 Over-Resolved Narrative Ambiguity -> §41. §39 Sequential Simple Sentences Instead of Subordination -> §42.
+
+### v2.10.0 ("branch run") - 2026-07-07
+
+Weekly evolution run 2: upstream re-checked (still current at `1b48564`, no new commits since last run - no-op). Widened research beyond last run's stylometry/burstiness core into discourse analysis, narrative-structure studies, and francophone-specific sources, per the source registry in `.routine/sources-log.md`.
+
+Note: this run's patterns were originally numbered §36-39; they were renumbered to §39-42 in v2.11.0 above to make room for the main-run patterns below. The section names and content are unchanged from what shipped here.
+
+**Added:**
+- §36 Shell-Noun Anaphoric Reference Overuse - "this approach/study/finding" restarting sentences instead of pronouns or combination
+- §37 Missing Reader-Engagement Markers (Flat Rhetorical Stance) - rhetorical questions and direct address as a human signal AI argumentative writing underuses
+- §38 Over-Resolved Narrative Ambiguity (Fiction) - a structural, narrative-level tell that survives line-level editing
+- §39 Sequential Simple Sentences Instead of Subordination - clause-packing/information-density tell distinct from sentence-length cadence (§35)
+- New PERSONALITY AND SOUL technique: talk to the reader directly (question, second person, aside)
+- 2026 caveat added to §7: AI-vocabulary word lists are a weakening signal because humans are visibly absorbing them into their own writing
+- New Detection Guidance subsection: "Detection is layered, not a single tell" (five-cue taxonomy)
+- "What this skill does not do" expanded with two nuances: stylistic fingerprints survive paraphrase-based evasion attacks on single documents, and newer/more-aligned models trend toward *less* lexical/syntactic diversity, not more
+- F4. Spatial-Metaphor Introductions ("dans le paysage de...") - French instantiation of the §1 "evolving landscape" tell
+- F5. Regional-Register Flattening - AI French defaults to metropolitan register and erases Québécois/Belgian/Swiss/African French voice; preserve regionalisms rather than "correcting" them
+
+**Sources consulted (new this run):**
+- [StoryScope: Investigating idiosyncrasies in AI fiction](https://arxiv.org/abs/2604.03136) - arXiv preprint
+- [Does ChatGPT Write Like a Student? Engagement Markers in Argumentative Essays - Jiang & Hyland](https://journals.sagepub.com/doi/10.1177/07410883251328311) - *Written Communication* (SAGE, Q1)
+- [Rhetorical distinctions: Comparing metadiscourse in essays by ChatGPT and students](https://www.sciencedirect.com/science/article/pii/S0889490625000134) - *English for Specific Purposes* (ScienceDirect, Q1)
+- ["This dissertation intricately explores...": ChatGPT's shell noun use in rephrasing dissertation abstracts - Huang & Deng](https://www.sciencedirect.com/science/article/pii/S0346251X24003634) - *System* (ScienceDirect, Q1)
+- [Metadiscursive nouns in academic argument: ChatGPT vs student practices](https://www.sciencedirect.com/science/article/pii/S1475158525000451) - *Journal of English for Academic Purposes* (ScienceDirect, Q1)
+- [Can AI simulate or emulate human stance? GPT-generated vs human-authored academic book reviews](https://www.sciencedirect.com/science/article/pii/S0378216625001833) - ScienceDirect (2025)
+- [Engagement strategies in human-written and AI-generated academic essays](https://www.sciencedirect.com/science/article/pii/S2215039025000219) - ScienceDirect (2025)
+- [Comparative analysis of text readability and writing styles in AI-generated vs. Human-written academic abstracts](https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0343163) - *PLOS ONE* (Q1)
+- [Comparing LLM-generated and human-authored news text using formal syntactic theory - Zamaraeva et al.](https://aclanthology.org/2025.acl-long.443/) - ACL 2025 main venue
+- [More Aligned, Less Diverse? Analyzing the Grammar and Lexicon of Two Generations of LLMs](https://arxiv.org/abs/2605.06030) - arXiv, 2026
+- [Attacks on Machine-Text Detectors Retain Stylistic Fingerprints](https://arxiv.org/abs/2505.14608) - arXiv / ICML 2026 poster
+- [What Distinguishes AI-Generated from Human Writing? A Rapid Review of the Literature](https://www.mdpi.com/2504-2289/10/2/55) - *Big Data and Cognitive Computing* (MDPI, Q2)
+- [Comment "dé-IA-iser" nos écrits pour éviter la disparition des particularités des langues ?](https://theconversation.com/comment-de-ia-iser-nos-ecrits-pour-eviter-la-disparition-des-particularites-des-langues-281811) - The Conversation (FR), academic linguists
+- [Comment Détecter l'Écriture IA : 15 Signes à Reconnaître (2026)](https://cours-ndrc.fr/detecter-ecriture-ia-guide-2026/) - lower-confidence blog source, cited for the pattern observation only, not the frequency statistic it quotes
+- [Quand l'humain parle comme ChatGPT: une étude prouve que notre langage est influencé par l'IA](https://siecledigital.fr/2025/06/24/quand-lhumain-parle-comme-chatgpt-une-etude-prouve-que-notre-langage-est-influence-par-lia/) - reporting on a Max Planck Institute for Human Development corpus study
+
+**Not yet used, logged for a future run** (see `.routine/sources-log.md` for the full registry and watchlist): late-text "volatility decay" in token-level surprisal (arXiv 2601.04833), DivEye token-diversity reframing of burstiness (arXiv 2509.18880), Portuguese vs. English comparative study (iScience), Persuaficial multilingual persuasion benchmark (arXiv 2601.04925), OrphAnalytics redundancy-measure method (*Scientific Reports*, 2023).
+
+### v2.10.0 ("main run") - 2026-07-07
 
 Weekly evolution run: synced with upstream (already current, 0 new commits to merge), then went deeper via four parallel research passes into paragraph-level structure, syntactic uniformity, cross-document redundancy, the AI-detector landscape, and a new Spanish-specific section. Added a persistent routine-state log (`.claude/HUMANIZER-ROUTINE-LOG.md`) so future weekly runs extend this research instead of repeating it.
+
+Note: this run's patterns kept their original numbers, §36-38, in v2.11.0 above; the other parallel run's patterns were renumbered to make room instead.
 
 **Added:**
 - §36 Uniform Paragraph Architecture (Flat Cohesion) - paragraph-length/shape uniformity as a measurable AI tell, mirroring §35 one level up
