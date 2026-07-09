@@ -1,6 +1,6 @@
 ---
 name: humanizer
-version: 2.11.0
+version: 2.12.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
@@ -12,8 +12,10 @@ description: |
   sentence-length cadence (low burstiness), narrow vocabulary range, uniform
   paragraph architecture, syntactic uniformity, redundant restatement,
   shell-noun overuse, missing reader-engagement markers, over-resolved
-  narrative ambiguity, under-subordinated clause packing, and French- and
-  Spanish-specific AI tells including regional-register flattening.
+  narrative ambiguity, under-subordinated clause packing, late-passage rhythm
+  flattening, non-chronological narrative structure, cultural genericization,
+  and French, Spanish, German, Italian, and Portuguese-specific AI tells
+  including regional-register flattening.
 license: MIT
 compatibility: any-agent
 allowed-tools:
@@ -547,7 +549,7 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 ### 35. Flat Sentence-Length Cadence (Low Burstiness)
 
-**Problem:** Human prose clusters unevenly: a run of short sentences, then one long sentence that unspools through several clauses, then short again. AI prose, even when each sentence is well-formed on its own, tends to hover in a mid-length band sentence after sentence, producing smooth but suspiciously even rhythm. This is measurable (see burstiness score in PERSONALITY AND SOUL above) and is a tell independent of word choice - a paragraph can pass every vocabulary check above and still read as AI purely from its rhythm.
+**Problem:** Human prose clusters unevenly: a run of short sentences, then one long sentence that unspools through several clauses, then short again. AI prose, even when each sentence is well-formed on its own, tends to hover in a mid-length band sentence after sentence, producing smooth but suspiciously even rhythm. This is measurable (see burstiness score in PERSONALITY AND SOUL above) and is a tell independent of word choice - a paragraph can pass every vocabulary check above and still read as AI purely from its rhythm. Caveat: a 2025 study found that long-range "fractal" sentence-length correlations - the kind of statistical patterning sometimes cited as proof of authorial intent - also show up in randomly generated text sequences, sometimes more strongly than in real literary corpora. Lean on the named burstiness score (0.65-0.85 human, below 0.30 AI), not on looser claims about "fractal" rhythm as a signal by itself.
 
 **Before:**
 > The team reviewed the proposal in detail during the meeting and raised several points for discussion. The budget projections were examined closely, and stakeholders debated whether the timeline was realistic. Everyone in the room agreed that further analysis was needed before a final decision could be made.
@@ -642,7 +644,7 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 
 ### 42. Sequential Simple Sentences Instead of Subordination
 
-**Problem:** Distinct from flat sentence-length cadence (§35, about length variance): this is about clause architecture. AI text often spreads related pieces of information - a method, a variable, a result - across a run of short, separate simple sentences instead of integrating them into one sentence with a subordinate or relative clause. The result reads as plain but is often less information-dense, and sometimes less readable, than the human sentence it is standing in for.
+**Problem:** Distinct from flat sentence-length cadence (§35, about length variance): this is about clause architecture. AI text often spreads related pieces of information - a method, a variable, a result - across a run of short, separate simple sentences instead of integrating them into one sentence with a subordinate or relative clause. The result reads as plain but is often less information-dense, and sometimes less readable, than the human sentence it is standing in for. Caveat: English sentence length and subordination have both been in real, gradual historical decline for two centuries independent of AI - so short, simple sentences alone are not automatically an AI tell. Flag clause-packing only when it appears as a pattern across a passage (several run-on chains of simple sentences that clearly belong together), not from a single short sentence in isolation.
 
 **Before:**
 > The team tested three algorithms. Each algorithm was run on the same dataset. Algorithm B produced the lowest error rate. This suggests it is the best choice for production.
@@ -651,11 +653,50 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > Of the three algorithms tested on the same dataset, Algorithm B produced the lowest error rate, which makes it the strongest candidate for production.
 
 
+### 43. Late-Passage Flattening (Volatility Decay)
+
+**Problem:** Distinct from flat sentence-length cadence (§35, an aggregate score for a whole passage) and uniform paragraph architecture (§36, sameness across paragraph shape): this is a *directional* tell inside one long passage. Token-level unpredictability and sentence rhythm in AI text measurably decay toward the back of a long passage - one study measured a 24-32% drop in token-level variability in the second half of long AI-generated passages versus the first, while human writing sustains its variability throughout. Read the last third of a long piece with extra suspicion: if the rhythm goes flat and safe exactly where a writer should be running out of rehearsed material and starting to improvise, that is the tell.
+
+**Before:**
+> The migration took three weeks longer than planned, mostly because of a scheduling conflict with the vendor's engineering team. We had budgeted two weeks for testing but ended up needing five, since the first two rounds surfaced a cascade of edge cases nobody had flagged in planning.
+>
+> The team completed the migration. The team ran the tests. The team verified the results. The team closed the ticket. The rollout was successful and the system is now stable.
+
+**After:**
+> The migration took three weeks longer than planned, mostly because of a scheduling conflict with the vendor's engineering team. We had budgeted two weeks for testing but ended up needing five, since the first two rounds surfaced a cascade of edge cases nobody had flagged in planning.
+>
+> By the third week, half the team wanted to just ship it and fix forward. The other half wanted one more full test pass. We split the difference, ran a final round on just the riskiest module, and it held. Ticket closed - though I'd bet money we find something in production by Friday.
+
+
+### 44. Chronological Linearity and Reduced Narrative Discontinuity (Fiction)
+
+**Problem:** Extends the over-resolved-ambiguity tell (§41) with a distinct structural mechanism. A large parallel corpus of matched human and AI-written fiction found AI stories favor strict chronological order and single-track plots, while human stories use more flashback, achronological reveal, and morally ambiguous protagonist choices - and this narrative-structure signal proved more robust than surface style: rewriting a story's word choice and sentence rhythm barely moved detection based on structure, while restructuring the timeline did. Don't just soften diction in fiction; consider whether the story's events are told in the order they happened, and whether they need to be.
+
+**Before:**
+> Sarah decided to leave her job. She packed her belongings, said goodbye to her coworkers, and walked out the door feeling relieved. It was the right decision, and she knew it as she stepped into the sunlight, ready for whatever came next.
+
+**After:**
+> Sarah would say later she'd made up her mind weeks earlier, in the parking lot after Denise's retirement party - though at the time she'd told herself she was just curious about the Boston listing. She cleared her desk in under ten minutes, which surprised her; she'd expected to cry. Relief wasn't quite the word for what she felt walking out. She wouldn't know if it had been the right call until much later, if ever.
+
+
+### 45. Cultural and Experiential Genericization
+
+**Problem:** When AI text touches a cultural practice, a family scene, or a lived experience, it tends to reach for the statistically modal version of that category - the generic holiday, the generic tradition, the generic emotion - rather than a specific, textured detail. A controlled study found AI writing assistance measurably homogenizes personal and cultural writing toward generic, Western-default framing and strips out the specific texture that marks a detail as actually lived rather than described. This is distinct from regional-register flattening (§F5): it is about which concrete details get chosen, not which dialect or formality level is used.
+
+**Before:**
+> We celebrated with sweets and gifts with the whole family.
+
+**After:**
+> My cousin smuggled in the good barfi past my aunt's diet radar, and we ate it standing in the kitchen because the table was already full.
+
+
 ## DETECTION GUIDANCE
 
 ### Detection is layered, not a single tell
 
 A 2026 rapid review of 40 empirical studies groups AI-vs-human cues into five families: surface (lexical/syntactic - most of §7-§35 above), discourse/pragmatic (stance and engagement, §40 and the metadiscourse notes below), epistemic/content (grounding, lived experience, specific detail), predictability (perplexity/burstiness, §35), and provenance (watermarking, out of scope here). No single family is reliable alone; reliable judgment comes from several independent families agreeing. When one tell is present and the others are absent, be skeptical of your own read.
+
+**Fix structure before style.** When editing time is limited, prioritize the structural layer over the lexical one. Research on AI-polished text (human draft plus an AI editing pass, not full generation) found detectors flag even light polishing passes, and different source models leave measurably different "polish fingerprints" - a weaker signal to chase than structure. Separately, the fiction research behind §44 found that fine-tuning a model to imitate human *style* alone dropped a style-based detector's catch rate sharply while a structure-based detector stayed robust - style is the easier layer to fake and the easier layer to over-invest editing time in. If you can only do one pass, fix paragraph architecture (§36), clause structure (§37, §42), and narrative/argument shape (§41, §44) before polishing word choice.
 
 ### What NOT to flag (false positives)
 
@@ -676,6 +717,7 @@ A clean human writer can hit several of the patterns above without any AI involv
 - **Secondhand text.** Do not rewrite watched phrases inside quotations, titles, proper names, or examples where the phrase is being discussed rather than used.
 - **Simple, consistent prose from a non-native English writer.** Published research on automated AI-detector false positives (not just this skill's own heuristics) found several commercial detectors flagging over half of TOEFL essays by non-native English speakers as AI-generated - because the same low-perplexity, low-burstiness signal that flags AI text also describes competent, simplified L2 writing. Don't mistake careful-but-simple prose from a second-language writer for AI just because it lacks burstiness.
 - **Formulaic, repetitive phrasing from neurodivergent writers.** For the same underlying reason, autistic and ADHD writers who default to structured, repetitive phrasing are flagged by these same detectors at elevated rates. Consistency reads as "AI-like" to a classifier even when it is a genuine, longstanding personal style.
+- **Skilled, highly polished human prose.** A 2026 peer-reviewed study on detector reliability found that automated tools create a "chilling effect" in educational settings: careful, well-edited human writing gets false-flagged because detectors were trained against a baseline that skilled human prose naturally exceeds, which paradoxically pushes some writers toward *adding* noise to their own writing to avoid suspicion. Do not treat "unusually polished for the context" as evidence of AI authorship by itself.
 
 When in doubt, look for **clusters** of tells, not isolated ones. A single em dash means nothing; em dashes plus rule-of-three plus *vibrant tapestry* plus a "Conclusion" section is a confession.
 
@@ -687,6 +729,8 @@ Adversarial research has found detector-evasion methods that corrupt text at the
 Research on evasion attacks backs this up: text optimized purely to fool a detector still carries its underlying stylistic fingerprint, which few-shot stylistic detectors pick back up, and any distribution shift that a paraphraser manages to hide re-emerges once several documents from the same source are analyzed together. Word-level disguises are fragile. Fixing the structural patterns above (shell nouns, engagement markers, narrative resolution, clause packing, sentence rhythm) is what actually changes the writing, not just the readout of a detector run once.
 
 A related trend worth knowing: newer, more heavily aligned models are not automatically harder to catch. Comparative work across model generations found that RLHF-style alignment training tends to narrow lexical and syntactic diversity further, not widen it - so diversity-based signals (§34, §37, §42) may get more discriminative over model generations, not less, contrary to the intuitive assumption that each new model generation writes more like a person.
+
+This also explains *why* the patterns in this skill exist in the first place, which is worth keeping in mind when deciding how aggressively to edit: research comparing base (non-instruction-tuned) model output to instruction-tuned chat output found that base-model text reads as human to leading detectors, while the same model's chat-tuned counterpart does not. The "AI style" this skill catalogs looks like it is largely a byproduct of instruction-tuning and RLHF - the helpful-assistant register - rather than an inherent property of language models. That is one more reason to fix the actual writing (structure, rhythm, specificity) rather than chase a detector score: the tells are a side effect of a training process, not a fixed fingerprint, and they show up strongest exactly where "helpful assistant" habits leak into the prose (hedging, signposting, generic reassurance) - see §21-28.
 
 
 ### Signs of human writing (preserve these)
@@ -782,7 +826,7 @@ Apply these in addition to, not instead of, the sections above when humanizing S
 
 **Palabras a vigilar:** cabe destacar, es importante destacar, en conclusión/en resumen, en el panorama actual, vamos a explorar, cautivar, además, exhaustivo, de gran relevancia, un sinfín de, un abanico de, es fundamental, juega un papel clave/crucial, sin duda alguna.
 
-**Problem:** These cluster in AI-generated Spanish the way §7's English list clusters in AI-generated English, though the evidence is tech-journalism observation rather than a published corpus study. "Es importante destacar" and "en el panorama actual" are cited repeatedly as tells precisely because AI overuses them as generic, content-free transitions.
+**Problem:** These cluster in AI-generated Spanish the way §7's English list clusters in AI-generated English, though most of this list is tech-journalism observation rather than a published corpus study. "Es importante destacar" and "en el panorama actual" are cited repeatedly as tells precisely because AI overuses them as generic, content-free transitions. This is now partly upgraded to academic evidence: a large 34-language study of AI-associated lexical shift in news continuations independently flags Spanish nouns like *testigos, organizaciones, analistas, equipos, multidisciplinario* and *intensificación* as measurably over-represented in AI continuations versus matched human text. That list is drawn from a news-register task and looks more like concrete nouns than the essay-register filler-phrase list above - treat the two lists as complementary (different registers), not as a single confirmed set, and prefer the peer-reviewed source when the two disagree.
 
 **Before:**
 > Es importante destacar que, en el panorama actual, la sostenibilidad es un tema de gran relevancia que cabe destacar en cualquier estrategia empresarial.
@@ -800,6 +844,117 @@ Apply these in addition to, not instead of, the sections above when humanizing S
 
 **After:**
 > El equipo hará un análisis para respaldar la nueva funcionalidad, y los usuarios pueden postularse al programa beta.
+
+
+## GERMAN-SPECIFIC PATTERNS
+
+Apply these in addition to, not instead of, the English sections above when humanizing German text. This is the best-evidenced non-English section in this skill: a peer-reviewed 34-language study of AI-associated vocabulary shift (news-continuation register) found German's AI-vocabulary usage rose 70.8% from 2020-21 to 2023-24 - the second-largest increase of the 34 languages studied, behind only Romanian and ahead of English's own 25.5% rise - giving German the strongest quantitative anchor of any language section here.
+
+### D1. Typography and Punctuation
+
+**Problem:** AI output in German defaults to the English em dash (—) instead of German's own typographic conventions (Halbgeviertstrich as a shorter dash, or more often a comma, colon, or parenthesis). This is a live, frequently-discussed pattern in German-language tech commentary, not just inferred by analogy - multiple independent write-ups flag the em dash specifically as a German ChatGPT tell, with one plausible mechanism being that "—" plus surrounding spaces tokenizes as a single cheap token in many tokenizers, making it statistically preferred over comma or semicolon constructions during training.
+
+**Before:**
+> Das Projekt war ein Erfolg — trotz aller Herausforderungen — und zeigt, was möglich ist.
+
+**After:**
+> Das Projekt war trotz aller Rückschläge ein Erfolg. Das zeigt, was möglich ist.
+
+### D2. Overused AI Vocabulary in German
+
+**Wörter, auf die zu achten ist:** betonen, hervorheben, Bedeutung, Notwendigkeit, Dringlichkeit, präzise, sorgfältig, ganzheitlich, umfassend, eintauchen, es ist wichtig zu beachten/sich daran zu erinnern, nicht nur..., sondern auch..., eine Rolle spielen.
+
+**Problem:** The core of this list - *betonen/hervorheben* ("emphasize"), *Bedeutung/Notwendigkeit/Dringlichkeit* ("importance/necessity/urgency"), and *präzise/sorgfältig* ("precise/careful") - comes from the same peer-reviewed 34-language lexical-shift study cited above, not just blog observation, which puts it on firmer footing than the French or Spanish vocabulary lists. *Ganzheitlich, umfassend,* and *eintauchen* are consistently flagged across independent German-language commentary but not yet confirmed in the academic source; treat those three as moderate confidence. Note the source data is a news-continuation task, not chatbot-essay writing, so cross-check against how these words actually surface in longer AI prose before assuming universal applicability.
+
+**Before:**
+> Es ist wichtig zu betonen, dass Nachhaltigkeit heute eine ganzheitliche Bedeutung hat — nicht nur für Unternehmen, sondern auch für die gesamte Gesellschaft — und eine entscheidende Rolle in jeder zukunftsorientierten Strategie spielt.
+
+**After:**
+> Nachhaltigkeit betrifft heute nicht nur Unternehmen, sondern die ganze Gesellschaft. Jede zukunftsorientierte Strategie kommt ohne sie nicht mehr aus.
+
+### D3. Calques and Anglicisms
+
+**Problem:** Least confirmed of the three German patterns - no AI-specific academic study was found for German calque patterns this run, only general (pre-AI) Anglizismen/Denglisch research applied by analogy, the same evidentiary shape as Spanish §S1. Watch for incorrect compound hyphenation with English loanwords ("AI Modelle" instead of "KI-Modelle") and inconsistent capitalization of borrowed terms. Flag as a plausible, not confirmed, pattern.
+
+**Before:**
+> Die neuen AI Modelle bieten state-of-the-art Performance für Unternehmen.
+
+**After:**
+> Die neuen KI-Modelle bieten Unternehmen eine Leistung auf dem neuesten Stand der Technik.
+
+
+## ITALIAN-SPECIFIC PATTERNS
+
+Apply these in addition to, not instead of, the English sections above when humanizing Italian text.
+
+### I1. Typography and Punctuation
+
+**Problem:** The em dash (—) is repeatedly flagged in Italian tech commentary as an anglicism, uncommon in standard Italian writing outside of the shorter trattino medio (–) or a comma/parenthesis doing the same rhetorical job. Multiple independent Italian-language sources converge on this pattern, including reporting that OpenAI itself acknowledged and adjusted for it in Italian-language output.
+
+**Before:**
+> Il progetto ha avuto successo — nonostante le difficoltà — e dimostra cosa è possibile fare.
+
+**After:**
+> Il progetto ha avuto successo nonostante le difficoltà e dimostra cosa è possibile fare.
+
+### I2. Overused AI Vocabulary in Italian
+
+**Parole a cui prestare attenzione:** sottolineare, evidenziare, importanza, innovativo, mirato, impeccabile, approfondito, perciò/dunque/quindi/di conseguenza, "nel panorama [attuale/digitale] di...".
+
+**Problem:** As with German, the core terms here - *sottolineare/evidenziare* ("emphasize/highlight"), *importanza*, *innovativo*, and *mirato/impeccabile/approfondito* ("targeted/impeccable/in-depth") - come from the same peer-reviewed 34-language lexical-shift study, though Italian's overall shift in that study was modest (mid-table, well behind German or Portuguese), so treat the diachronic trend as real but unremarkable rather than a strong hook. The connective cluster (*perciò, dunque, quindi*) is blog-sourced only, moderate confidence. "Nel panorama [attuale/digitale] di..." is the direct Italian instantiation of the same "evolving landscape" opener already flagged for English (§1) and French (F4) - high confidence by cross-linguistic consistency even without a dedicated Italian study.
+
+**Before:**
+> Nel panorama digitale odierno, è fondamentale sottolineare l'importanza di un approccio innovativo e mirato — perciò le aziende devono ripensare la propria strategia in modo approfondito.
+
+**After:**
+> Le aziende che vogliono restare competitive devono ripensare la propria strategia da zero, con un approccio nuovo e mirato.
+
+### I3. Calques and Register
+
+**Problem:** No AI-specific academic study confirms a dedicated Italian calque list this run; flag as plausible, not confirmed. A directly relevant academic paper exists on a related question - whether native Italian speakers can reliably spot AI-generated Italian news text (they largely cannot, even against text generated by a model trained mostly on English) - which supports the "Detection is layered" guidance above more than it supplies a word list.
+
+**Before:**
+> Il team realizzerà un'analisi per supportare la nuova funzionalità.
+
+**After:**
+> Il team farà un'analisi per sostenere la nuova funzionalità.
+
+
+## PORTUGUESE-SPECIFIC PATTERNS
+
+Apply these in addition to, not instead of, the English sections above when humanizing Portuguese text. Evidence here is uneven by sub-pattern: the vocabulary list and the register-level finding are both peer-reviewed; the typography note is inferred by analogy, same caveat as Spanish §S1.
+
+### P1. Typography and Punctuation
+
+**Problem:** Not AI-specific evidence - inferred by analogy from general Portuguese typographic norms, flagged here as plausible only. Brazilian and European Portuguese convention favors the travessão (—) specifically for marking direct speech, and treats English-style double quotes as a foreign import used mainly for slang or neologisms; European Portuguese traditionally uses angular guillemets («...») in the same family as French and Spanish formal quotation. AI output defaulting to English-style straight quotes for ordinary quoted speech, instead of the travessão convention, is the plausible tell.
+
+**Before:**
+> "Vamos comemorar," disse ela, "porque merecemos."
+
+**After:**
+> — Vamos comemorar — disse ela —, porque merecemos.
+
+### P2. Overused AI Vocabulary in Portuguese
+
+**Palavras a observar:** enfatizar, destacar, ressaltar, importância, inovador, rigoroso, crucial.
+
+**Problem:** *Enfatizar/destacar/ressaltar* ("emphasize/highlight/stress"), *importância*, *inovador*, and *rigoroso* come from the same peer-reviewed 34-language lexical-shift study cited in the German and Italian sections above - Portuguese ranked around 8th of 34 languages for size of AI-vocabulary increase, a solid positive shift though not as dramatic as German's. *Crucial* is flagged separately by Portuguese-language commentary and is also independently documented as an English/French/Spanish AI tell, which raises its plausibility despite coming from a single source.
+
+**Before:**
+> É crucial ressaltar a importância de uma abordagem inovadora e rigorosa — as empresas que não priorizarem essa transformação correrão o risco de ficar para trás no mercado atual.
+
+**After:**
+> As empresas que não mudarem de abordagem agora vão ficar para trás.
+
+### P3. Register: Formal and Motivational Flattening
+
+**Problem:** Distinct from a calque list - this is a register-level finding from a peer-reviewed study (LIWC and SAGE psycholinguistic analysis) comparing human- and AI-generated Portuguese text: AI-generated Portuguese trends measurably more formal, more structured, and more positive/motivational than matched human text, while human Portuguese text varies more in length, carries more negative emotion, and uses more personal reference. The same study found a misinformation-detection model far less accurate on AI-generated Portuguese text (75%) than on human text (93%), meaning AI-generated Portuguese misinformation is comparatively harder for existing tools to catch - a reason to weight the qualitative register cues here even without a matching word list.
+
+**Before:**
+> É fundamental adotar uma abordagem inovadora e positiva diante dos desafios, transformando obstáculos em oportunidades de crescimento para toda a equipe.
+
+**After:**
+> Não sei se isso vai dar certo. A equipe está cansada e os prazos não ajudam, mas pelo menos já sabemos o que não fazer de novo.
 
 
 ---
@@ -871,6 +1026,57 @@ Key insight from Wikipedia: "LLMs use statistical algorithms to guess what shoul
 
 
 ## Changelog
+
+### v2.12.0 - 2026-07-09
+
+Weekly evolution run 4 (first run under the expanded multi-agent research process). Upstream sync: `blader/humanizer` main had 0 new commits (no-op). Six parallel research agents fanned out across previously-unmined venues per `.routine/sources-log.md`'s watchlist: HAL (French open archive), ACL Anthology direct browse, Semantic Scholar forward-citation chase from six seed papers, frontier-paper retries plus German/Italian/Portuguese scouting, a detector-site empirical spot-check plus another discourse-coherence push, and the mandatory general 2026 sweep. Environment note for future runs: this session's egress policy blocks direct WebFetch/curl to arxiv.org, aclanthology.org, semanticscholar.org, hal.science, and every public AI-detector site tested (confirmed via the proxy status endpoint as an organization-level policy denial, not a source-side block) - all findings below came from WebSearch snippet synthesis, except one paper recovered via its GitHub-hosted PDF mirror (`raw.githubusercontent.com` was reachable when arxiv.org was not - worth trying for any future blocked arXiv paper with a code repo).
+
+**Added (English, 3 new numbered patterns, §43-45):**
+- §43 Late-Passage Flattening (Volatility Decay) - AI passages lose rhythmic/lexical variability in their back third even when the opening was varied; distinct from aggregate burstiness (§35) and paragraph-shape uniformity (§36)
+- §44 Chronological Linearity and Reduced Narrative Discontinuity (Fiction) - extends §41 with a distinct structural mechanism: AI fiction favors strict chronological order and single-track plots over flashback/achronological reveal
+- §45 Cultural and Experiential Genericization - AI defaults to the statistically modal instantiation of a cultural/experiential detail rather than a specific, lived one; distinct from register flattening (§F5)
+
+**Added (guidance and caveats, no renumbering):**
+- New "Fix structure before style" prioritization note under "Detection is layered" - structural edits (§36, §37, §41, §42, §44) move detection more than lexical polish does, per two independent 2026 studies
+- New false-positive bullet: skilled, highly polished human writing gets false-flagged by detectors, per a 2026 peer-reviewed study on the "chilling effect" in educational settings
+- New framing paragraph in "What this skill does not do": base (non-instruction-tuned) models read as human to leading detectors while their chat-tuned counterparts don't - the tells this skill catalogs are plausibly an instruction-tuning/RLHF artifact, not an inherent LLM property
+- Caveat added to §35: long-range "fractal" sentence-length correlations also appear in randomly generated text, so lean on the named 0.65-0.85/<0.30 burstiness score, not looser "fractal rhythm" claims
+- Caveat added to §42: English sentence length and subordination have been in real, gradual historical decline for two centuries independent of AI - flag clause-packing only as a passage-level pattern, not from one short sentence
+- Spanish §S2 upgraded from tech-journalism-only to partly peer-reviewed: added a Spanish AI-vocabulary list (testigos, organizaciones, analistas, equipos, multidisciplinario, intensificación) from a 34-language academic lexical-shift study, kept alongside the existing essay-register blog list rather than replacing it (different registers, both cited honestly)
+
+**Added (new language sections, 9 new sub-patterns):**
+- GERMAN-SPECIFIC PATTERNS (D1-D3): typography (em dash anglicism), AI vocabulary (betonen/hervorheben/Bedeutung/präzise, etc. - the best-evidenced non-English vocabulary list in this skill, backed by a peer-reviewed source and a +70.8% diachronic usage-increase figure), calques (weak/inferred, honestly flagged)
+- ITALIAN-SPECIFIC PATTERNS (I1-I3): typography (em dash anglicism), AI vocabulary (sottolineare/importanza/innovativo, etc., plus the "nel panorama di..." calque of the §1/F4 landscape-opener tell), calques/register (weak, one directly relevant academic paper on human-judgment limits noted instead of a word list)
+- PORTUGUESE-SPECIFIC PATTERNS (P1-P3): typography (weak/inferred, same caveat tier as Spanish §S1), AI vocabulary (enfatizar/importância/inovador/rigoroso/crucial, from the same 34-language study), and a new register-level pattern (P3) sourced to a peer-reviewed LIWC/SAGE study: AI-generated Portuguese trends more formal/structured/positive than human Portuguese, which is also measurably harder for existing misinformation-detection tooling to catch
+
+**Rejected this run (logged, not added):** discourse coherence / entity-grid as a standalone pattern - still only one weak-to-neutral source (PMC11998594, which if anything found AI *slightly more* holistically coherent than human text) plus two newly-found, mutually disagreeing Coh-Metrix studies (Zhou et al. 2023 found AI worse on "deep cohesion" but better on referential cohesion; Nkhobo & Chaka 2023, n=7, found the opposite on referential cohesion). Scattered, construct-mismatched, non-convergent evidence - the 2+ solid agreeing sources bar stays uncleared. Logged as a frontier again below, now with the caveat that "coherence" needs a fixed operational definition (entity-grid vs. holistic-schema vs. Coh-Metrix deep-cohesion) before it can be resolved, not just more studies under the same vague label.
+
+**Attempted and inconclusive (logged so it isn't retried the same way):** an empirical detector spot-check (running this skill's own Before/After examples through a free-tier AI-text-detector UI) was attempted but blocked entirely at the network-policy layer described above, before reaching any site's JS/login layer - so this remains untested, not negative. Retry only if a future run's environment allows the relevant hosts.
+
+**Sources consulted (new this run, evidence-graded):**
+- [StoryScope: Investigating idiosyncrasies in AI fiction (Russell et al.)](https://arxiv.org/abs/2604.03136) - **ACL 2026 oral (top 3.9%)**, upgraded from "preprint" last run; large parallel corpus (10,272 prompts x human + 5 LLMs, 304 narrative features); source for §44 and the structure-over-style note
+- [When AI Settles Down: Late-Stage Stability as a Signature of AI-Generated Text Detection](https://arxiv.org/abs/2601.04833) - arXiv preprint; source for §43
+- [DivEye: Diversity Boosts AI-Generated Text Detection (IBM Research)](https://arxiv.org/abs/2509.18880) - **confirmed accepted at TMLR 2026** this run (evidence upgrade from "queued preprint"); corroborates §43's surprisal-variability framing
+- [Base Models Look Human To AI Detectors (CMU)](https://arxiv.org/abs/2605.19516) - preprint; source for the base-model/RLHF framing note
+- [Almost AI, Almost Human: The Challenge of Detecting AI-Polished Writing (Saha & Feizi, UMD)](https://arxiv.org/abs/2502.15666) - preprint, APT-Eval benchmark (14.7K samples); source for the "fix structure before style" note
+- [People who frequently use ChatGPT for writing tasks are accurate and robust detectors of AI-generated text (Russell, Karpinska, Iyyer)](https://arxiv.org/abs/2501.15654) - ACL 2025; corroborates that surface-only humanization doesn't fool careful human readers
+- [AI writing detectors are ineffective, unreliable and harmful (Giray, Roe, Diesta Espiritu, 2026)](https://doi.org/10.1108/ETPC-07-2025-0155) - *English Teaching: Practice & Critique*, Emerald - source for the new "chilling effect" false-positive bullet
+- [AI Suggestions Homogenize Writing Toward Western Styles and Diminish Cultural Nuances](https://arxiv.org/abs/2409.11360) - 118-participant controlled study; source for §45 (surfaced via topical search, not a forward citation - flagged honestly as such)
+- [Fractal Illusions: Long-Range Sentence-Length Correlations in Randomly Generated Text (Zeng, Cui, Li)](https://arxiv.org/abs/2508.19782) - arXiv preprint; source for the §35 caveat
+- [Variation of sentence length across time and genre (Rudnicka)](https://arxiv.org/abs/2502.04321) - also *Studies in Corpus Linguistics* vol. 85, John Benjamins; source for the §42 caveat
+- [AI-Associated Lexical Shifts Across 34 Languages (Juzek, Florida State University)](https://arxiv.org/abs/2605.25358) - **EMNLP 2026** (ACL-ARR reviewed); recovered via the paper's own GitHub PDF mirror after arXiv access was blocked; large-scale (7.1B tokens), heavily validated; primary source for the new German/Italian/Portuguese vocabulary lists and the Spanish §S2 upgrade
+- [A linguistic comparison between human- and AI-generated content (Portuguese)](https://www.cell.com/iscience/fulltext/S2589-0042(26)00351-2) - *iScience*, Cell Press, 2026; source for Portuguese §P3
+- Antoun, Mouilleron, Sagot, Seddah, "Is ChatGPT that Easy to Detect?" - TALN 2023 / [arXiv:2306.05871](https://arxiv.org/abs/2306.05871) - found via direct HAL search; detector-robustness paper, not a stylistic-tell source, logged for completeness
+- Alavoine et al., "Limitations of Human Identification of Automatically Generated Text" - LREC-COLING 2024, [aclanthology.org/2024.lrec-main.919](https://aclanthology.org/2024.lrec-main.919) - found via HAL; supports the general "gut-feel detection is unreliable" framing, not a numbered pattern
+- Puccetti, Rogers, Alzetta, Dell'Orletta, Esuli, "AI 'News' Content Farms Are Easy to Make and Hard to Detect: A Case Study in Italian" - ACL 2024, [aclanthology.org/2024.acl-long.817](https://aclanthology.org/2024.acl-long.817) - logged for Italian §I3
+- Zhou et al., "Chinese Intermediate English Learners outdid ChatGPT in deep cohesion" - *System*, Elsevier, 2023 / [arXiv:2303.11812](https://arxiv.org/abs/2303.11812) - logged under rejected discourse-coherence candidates above
+- [Interpretable Stylistic Variation in Human and LLM Writing Across Genres, Models, and Decoding Strategies](https://arxiv.org/abs/2604.14111) - flagged unread, queued for next run
+- [How Human-Like Are Large Language Models? A Register-Aware Linguistic Evaluation Framework](https://arxiv.org/abs/2605.23651) and [AI Brown and AI Koditex](https://arxiv.org/abs/2509.22996) / [Benchmark of stylistic variation in LLM-generated texts](https://arxiv.org/abs/2509.10179) - two independent Biber-framework register-linguistics groups, converging but not yet folded into a numbered pattern; queued for next run
+- Silva & Rottava, "Densidade Lexical em Textos Gerados pelo ChatGPT" - *Texto Livre*, SciELO, 2024, `scielo.br/j/tl/a/crx3yywCw3LSxtjtdv44mDC` - multi-language (DE/ES/FR/IT/PT) corpus, not yet mined; SciELO was not observed blocked this run, high priority for next run
+
+Full source registry, evidence grades, dry-well query lists, and the updated venue watchlist are maintained in `.routine/sources-log.md` (not duplicated here in full to keep this changelog readable).
+
+**Known backlog, flagged for the human:** this branch is currently 6 commits ahead of `main` with no open pull request - the last several weekly-evolution commits (v2.9.0 through this one) have not been merged or opened as a PR. This routine does not open PRs unless explicitly asked; flagging so a human can decide whether to open one.
 
 ### v2.11.0 - 2026-07-08
 
