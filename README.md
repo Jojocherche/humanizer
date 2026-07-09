@@ -98,7 +98,9 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 
 > "LLMs use statistical algorithms to guess what should come next. The result tends toward the most statistically likely result that applies to the widest variety of cases."
 
-## 35 Patterns Detected (with Before/After Examples)
+## Patterns Detected (with Before/After Examples)
+
+**Note:** `SKILL.md` is the source of truth and is ahead of this table - it now documents 45 numbered English patterns (§1-45) plus five language-specific sections (French, Spanish, German, Italian, Portuguese). This table has not been kept in sync through several recent weekly-evolution runs (last fully updated at 35 patterns, v2.9.0); rebuilding it fully is logged as follow-up work rather than attempted as a rushed partial edit here. See `SKILL.md`'s own Changelog section for the complete, current pattern list and sourcing.
 
 ### Content Patterns
 
@@ -195,6 +197,8 @@ The skill also includes a final "obviously AI generated" audit pass and a second
 
 ## Version History
 
+- **2.12.0** - Weekly evolution run 4: added patterns #43-45 (late-passage rhythm flattening, non-chronological narrative structure, cultural/experiential genericization), plus caveats to #35 and #42, a "fix structure before style" prioritization note, a new false-positive bullet, and full German- and Italian-specific pattern sections plus a Portuguese-specific pattern section (new). Upgraded Spanish AI-vocabulary evidence with an academic source. Full sourcing in `SKILL.md`'s Changelog.
+- **2.10.0 / 2.11.0** - Two parallel weekly-evolution runs added patterns #36-42 (paragraph-cohesion uniformity, syntactic uniformity, redundant restatement, shell-noun anaphora, reader-engagement markers, over-resolved narrative ambiguity, under-subordinated clause packing) and a Spanish-specific patterns section; reconciled into a single v2.11.0 release. Full detail in `SKILL.md`'s Changelog (this README's version history was not updated in real time for these two runs - backfilled here).
 - **2.9.0** - Added patterns #34 (narrow vocabulary range / missing hapax legomena) and #35 (flat sentence-length cadence / low burstiness) from stylometric research; added a French-specific patterns section (typography, AI vocabulary, anglicized calques); added a scope note distinguishing genuine editing from detector-evasion tricks; enriched the personality section with two techniques grounded in the same research. 35 patterns total.
 - **2.8.2** - Replaced the full before/after example with a first-person Lisbon trip recap. The after now keeps the same topic, perspective, and rough length as the before while removing the AI tells without becoming clipped or slogan-like. No change to the 33 patterns.
 - **2.8.1** - Added cross-agent installation docs, optional Claude Code plugin packaging, and a compact secondhand-text false-positive guard. No change to the 33 patterns.
