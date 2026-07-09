@@ -1,6 +1,6 @@
 ---
 name: humanizer
-version: 2.12.0
+version: 2.12.1
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
@@ -62,6 +62,23 @@ If the user provides a writing sample (their own previous writing), analyze it b
 ### How to provide a sample
 - Inline: "Humanize this text. Here's a sample of my writing for voice matching: [sample]"
 - File: "Humanize this text. Use my writing style from [file path] as a reference."
+
+### Worked example: default voice vs. a matched sample (French)
+
+A rewrite that clears every AI pattern above can still sound like *a* human instead of *this* human. Compare the same passage humanized with the skill's default voice against the same passage matched to a specific writing sample.
+
+**Sample provided by the writer (their own prior writing, used only to extract tics, not copied):**
+> Le télétravail a changé la façon dont les équipes travaillent ensemble. Et ce, pas toujours en bien. Là où certains gagnent en autonomie, d'autres perdent le réflexe d'aller frapper à la porte du bureau d'à côté pour régler un truc en trente secondes. Ce qui est sûr, on ne reviendra plus vraiment en arrière puisque même les boîtes les plus réticentes ont dû revoir leurs open spaces à moitié vides.
+
+Reading the sample against the checklist in step 1 above: mid-length sentences with one deliberate short fragment for emphasis; register just casual enough to use "truc" and "boîtes" but not slangy; opens a sentence with a bare "Et" as a rhythm break, which is a strong human tic (AI text almost never starts a sentence with a coordinating conjunction); prefers subordination ("Là où X, Y", "puisque") over punctuation doing the connective work (semicolons, colons); avoids the "ce qui est sûr, c'est que" formula by dropping "c'est que" entirely.
+
+**Default voice (no sample given):**
+> Le télétravail a changé la façon dont les équipes bossent ensemble, et pas toujours en bien. Certains gagnent en autonomie ; d'autres perdent le réflexe d'aller frapper à la porte du bureau d'à côté pour régler un truc en trente secondes. Ce qui est sûr, c'est qu'on ne reviendra plus vraiment en arrière : même les boîtes les plus réticentes ont dû revoir leurs open spaces à moitié vides.
+
+**Matched to the sample:**
+> Le télétravail a changé la façon dont les équipes travaillent ensemble. Et ce, pas toujours en bien. Là où certains gagnent en autonomie, d'autres perdent le réflexe d'aller frapper à la porte du bureau d'à côté pour régler un truc en trente secondes. Ce qui est sûr, on ne reviendra plus vraiment en arrière puisque même les boîtes les plus réticentes ont dû revoir leurs open spaces à moitié vides.
+
+Both are clean of AI patterns. Only the matched version sounds like the person who wrote the sample: the semicolon becomes a "Là où X, Y" subordination, the colon becomes "puisque," "c'est que" gets dropped, and the standalone "Et ce, pas toujours en bien." fragment is kept rather than folded back into the previous sentence. None of these are AI tells being removed - they are voice being added back once the tells are gone.
 
 
 ## PERSONALITY AND SOUL
@@ -1026,6 +1043,10 @@ Key insight from Wikipedia: "LLMs use statistical algorithms to guess what shoul
 
 
 ## Changelog
+
+### v2.12.1 - 2026-07-09
+
+Patch, ad hoc (not a weekly-evolution run): added a worked example to "Voice Calibration" showing a default-voice rewrite against a rewrite matched to a real user-provided French writing sample, side by side. No new numbered patterns. Prompted by a live conversation where a user supplied their own rewrite of this skill's own Lisbon-style demo passage as a voice sample; added with their consent, tics only (subordination over punctuation, bare-"Et" sentence fragments, dropping "c'est que"), not their literal text used as a permanent example anywhere else in the skill.
 
 ### v2.12.0 - 2026-07-09
 
