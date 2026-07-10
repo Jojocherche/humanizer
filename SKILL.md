@@ -1,6 +1,6 @@
 ---
 name: humanizer
-version: 2.12.1
+version: 2.13.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
@@ -707,6 +707,39 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 > My cousin smuggled in the good barfi past my aunt's diet radar, and we ate it standing in the kitchen because the table was already full.
 
 
+### 46. Register Distortion: Drift Toward the "Informational" Pole
+
+**Problem:** Even when a passage calls for genuine involvement - a text to a friend, a diary entry, a casual aside - AI writing pulls toward a more informational, nominalized, impersonal register: more nouns and prepositional phrases, fewer contractions, fewer private verbs ("think," "feel," "guess"), fewer hedges and discourse particles, less first/second-person address. Two independent research groups using classic Biber multidimensional analysis on separate corpora and model sets found the same directional shift on the "involved vs. informational" dimension, and one found it persists even when models are explicitly asked to write in a conversational register. This is broader than any single vocabulary list (§7) or the essay-specific engagement-marker gap (§40): it is a register-level bundle of features, not a word list.
+
+**Before:**
+> I wanted to update you regarding the situation with the apartment. The landlord has indicated that the lease renewal process will require additional documentation, and it appears the timeline may be extended by approximately two weeks.
+
+**After:**
+> So the landlord thing dragged on - they want more paperwork before they'll renew the lease, ugh. Looks like it's two more weeks, maybe. I'll keep you posted.
+
+
+### 47. Persuasive Mood Flattening
+
+**Problem:** When AI is asked to write persuasively - especially *subtly* persuasively, rather than as an obvious pitch - it leans on hedged modal verbs ("might," "could," "may want to consider") and neutral declarative sentences, and under-uses the rhetorical questions and exclamatory force human persuasive writing reaches for. A six-language benchmark (including French) found this mood-flattening is exactly what makes subtle AI persuasion harder to catch than overt AI persuasion - the same mechanism that makes it read as flat rather than convincing to a human reader. Distinct from the lexical authority-tropes already flagged in §27: this is about sentence mood and rhetorical stance, not word choice.
+
+**Before:**
+> You might want to consider that switching providers could potentially reduce your costs. It may be worth evaluating your options.
+
+**After:**
+> Why are you still paying for this? Switch providers - it's a smaller bill, full stop.
+
+
+### 48. Cross-Scene Affective Sameness (Fiction)
+
+**Problem:** Beyond losing rhythmic variability late in a single passage (§43), AI fiction fails to shift emotional intensity and voice across scenes that call for different registers - a scene written "for a literary magazine" and a scene written "for a fanfic forum" come out reading almost identically once the same model produces both, and high-intensity emotional beats get pulled toward neutral affect. Research isolating the post-training stage (not model scale) as the cause found this convergence holds regardless of the target domain a model is asked to imitate. Distinct from §41 (ambiguity resolution) and §44 (chronological ordering): this is about emotional register and cross-context adaptation, not plot structure.
+
+**Before:**
+> She found out about the affair. It was upsetting, and she didn't know what to do next. Later, at the funeral, she felt a similar sadness as she stood by the casket.
+
+**After:**
+> She found out about the affair from a grocery receipt, of all things, and threw the phone across the room hard enough to crack the screen. At the funeral three years later, there was no throwing anything - just a flat, exhausted quiet, like she'd used up all the anger already.
+
+
 ## DETECTION GUIDANCE
 
 ### Detection is layered, not a single tell
@@ -714,6 +747,8 @@ Before returning the final rewrite, scan it for `—` and `–`. Any hit means t
 A 2026 rapid review of 40 empirical studies groups AI-vs-human cues into five families: surface (lexical/syntactic - most of §7-§35 above), discourse/pragmatic (stance and engagement, §40 and the metadiscourse notes below), epistemic/content (grounding, lived experience, specific detail), predictability (perplexity/burstiness, §35), and provenance (watermarking, out of scope here). No single family is reliable alone; reliable judgment comes from several independent families agreeing. When one tell is present and the others are absent, be skeptical of your own read.
 
 **Fix structure before style.** When editing time is limited, prioritize the structural layer over the lexical one. Research on AI-polished text (human draft plus an AI editing pass, not full generation) found detectors flag even light polishing passes, and different source models leave measurably different "polish fingerprints" - a weaker signal to chase than structure. Separately, the fiction research behind §44 found that fine-tuning a model to imitate human *style* alone dropped a style-based detector's catch rate sharply while a structure-based detector stayed robust - style is the easier layer to fake and the easier layer to over-invest editing time in. If you can only do one pass, fix paragraph architecture (§36), clause structure (§37, §42), and narrative/argument shape (§41, §44) before polishing word choice.
+
+**Not every catalogued tell generalizes.** A 2026 systematic study testing 284 linguistic features across 27 LLMs and 10 domains found that most previously-proposed stylistic tells are context-dependent - a feature that reliably separates AI from human text in one domain/model pairing often fails to generalize to another. Lexical-richness-type measures (§34, and the diversity notes throughout) held up the most robustly across models and domains in that study. Read that as a reason for humility, not paralysis: keep leaning on convergent clusters of tells (see above), and treat any single pattern in this skill as a strong prior for one domain and model family, not a universal law.
 
 ### What NOT to flag (false positives)
 
@@ -735,6 +770,8 @@ A clean human writer can hit several of the patterns above without any AI involv
 - **Simple, consistent prose from a non-native English writer.** Published research on automated AI-detector false positives (not just this skill's own heuristics) found several commercial detectors flagging over half of TOEFL essays by non-native English speakers as AI-generated - because the same low-perplexity, low-burstiness signal that flags AI text also describes competent, simplified L2 writing. Don't mistake careful-but-simple prose from a second-language writer for AI just because it lacks burstiness.
 - **Formulaic, repetitive phrasing from neurodivergent writers.** For the same underlying reason, autistic and ADHD writers who default to structured, repetitive phrasing are flagged by these same detectors at elevated rates. Consistency reads as "AI-like" to a classifier even when it is a genuine, longstanding personal style.
 - **Skilled, highly polished human prose.** A 2026 peer-reviewed study on detector reliability found that automated tools create a "chilling effect" in educational settings: careful, well-edited human writing gets false-flagged because detectors were trained against a baseline that skilled human prose naturally exceeds, which paradoxically pushes some writers toward *adding* noise to their own writing to avoid suspicion. Do not treat "unusually polished for the context" as evidence of AI authorship by itself.
+- **Similar lexical density regardless of language or skill level.** A peer-reviewed multi-language study (German, Spanish, French, Italian, Portuguese) found ChatGPT output shows no significant difference in lexical density across languages or across target proficiency levels - meaning raw lexical density is not, by itself, a reliable AI-vs-human signal in these languages. Lean on the vocabulary, calque, and register patterns in the language-specific sections below instead of density counts.
+- **Dialect and age alone.** Preliminary (preprint, not yet peer-reviewed) research testing AI detectors across demographic subgroups found consistent recall disparities for underrepresented dialects and age groups, similar in kind to the non-native-speaker and neurodivergent-writer biases above. Treat unfamiliar dialect features or an unexpected age-coded style as a possible false-positive risk, not confirmation of AI authorship.
 
 When in doubt, look for **clusters** of tells, not isolated ones. A single em dash means nothing; em dashes plus rule-of-three plus *vibrant tapestry* plus a "Conclusion" section is a confession.
 
@@ -815,7 +852,7 @@ The patterns above transfer directly to French, but French has its own typograph
 
 ### F5. Regional-Register Flattening
 
-**Problem:** AI French defaults to a standardized, metropolitan (Hexagonal) register even when the source text carries a regional voice - Québécois, Belgian, Swiss, or African French. It strips out regional lexicon, syntax, and idiom in favor of "neutral" standard French. When humanizing French text that has, or should have, a regional voice, do not flatten it toward the metropolitan default; preserve regionalisms as a human signal, the same way an English editor preserves British versus American spelling and idiom rather than silently converting one to the other.
+**Problem:** AI French defaults to a standardized, metropolitan (Hexagonal) register even when the source text carries a regional voice - Québécois, Belgian, Swiss, or African French. It strips out regional lexicon, syntax, and idiom in favor of "neutral" standard French. When humanizing French text that has, or should have, a regional voice, do not flatten it toward the metropolitan default; preserve regionalisms as a human signal, the same way an English editor preserves British versus American spelling and idiom rather than silently converting one to the other. This is now backed by peer-reviewed NLP benchmark evidence, not just journalism: a Université Laval corpus study (QFrCoLA, EMNLP 2025) found cross-lingual LLMs have not reliably acquired linguistic judgment for Quebec French specifically, corroborated by a companion minimal-pairs benchmark (QFrBLiMP, EACL 2026) and a dialect-adaptation study, both measuring the same "prestige French" default gap this pattern describes.
 
 **Before (over-corrected to metropolitan French):**
 > J'ai fait du shopping toute la journée et j'étais épuisée. J'ai décidé de dîner tôt et de me coucher.
@@ -1041,8 +1078,52 @@ Key insight from Wikipedia: "LLMs use statistical algorithms to guess what shoul
 
 **Detector landscape (context, not a target):** current AI-text detectors include GPTZero, Originality.ai, Copyleaks, Pangram, Winston AI, Turnitin, Sapling, ZeroGPT, and Grammarly's detector. The RAID benchmark (Dugan et al., ACL 2024) found detectors generalize poorly across unseen models and domains; Pangram's independently verified false-positive rate is 0.01-0.1%, including on non-native-English essays, while simpler tools underperform in most comparisons. This context is here to explain the false-positive guidance in DETECTION GUIDANCE above, not as a target to optimize against - see "What this skill does not do."
 
+Two 2026 developments worth noting (moderate confidence - sourced via secondary/aggregator coverage, primary company pages were unreachable this run): Pangram shipped a 3.2 update with improved short-text (50-75 word) recall, and a separately peer-reviewed classifier, EditLens (accepted ICLR 2026), reframes detection as a spectrum - how much of a text is AI-edited - rather than a binary label. Mechanically, the zero-shot detectors in this landscape (Binoculars, DetectGPT and its descendants) work by comparing a text's log-perplexity against a paired or perturbed baseline: human text tends to sit at a local maximum of probability under small perturbations, AI text usually does not. That is the statistical ancestor of the burstiness/perplexity intuition this skill uses qualitatively throughout.
+
 
 ## Changelog
+
+### v2.13.0 - 2026-07-10
+
+Weekly evolution run 5. Branch note: this session's designated branch (`claude/inspiring-ramanujan-ezf25q`) had already been merged via PR #3 - restarted it fresh from `origin/main` per this repo's routine convention rather than stacking new work on already-merged history. Checked for parallel-run collisions (RULE 1B): none found this week; two dangling stale branches from 2026-07-07 (`claude/gifted-bohr-n6qoz7` v2.10.0, `claude/peaceful-ptolemy-jnwhpi` v2.9.0) predate and are already fully reconciled into current `main` per the v2.11.0 changelog entry - left untouched. Upstream sync: `blader/humanizer` main unchanged since the original fork point (`1b48564`) - no-op, reconfirmed.
+
+Six parallel research agents fanned out across previously-unmined venues from `.routine/sources-log.md`'s watchlist instead of repeating prior sweeps: SciELO/KONVENS/EMNLP direct mining, a Biber-multidimensional-analysis register-distortion synthesis, detector-methodology updates plus dialect/age false-positive bias, a francophone direct-venue deep dive (Langages, Érudit, Université Laval's GRAIL lab), a general 2026 sweep plus two narrowly-refocused frontier retries, and forward citation-chasing from the two heaviest-cited papers already in this skill.
+
+**Added (English, 3 new numbered patterns, §46-48):**
+- §46 Register Distortion: Drift Toward the "Informational" Pole - AI text pulls toward nominalized, impersonal phrasing even in registers that call for involvement (casual, conversational), converging across two independent Biber-MDA research groups on separate corpora and model sets
+- §47 Persuasive Mood Flattening - AI persuasive writing over-hedges with modals and under-uses rhetorical questions/exclamations versus human persuasive writing, distinct from the lexical authority-tropes in §27
+- §48 Cross-Scene Affective Sameness (Fiction) - AI fiction fails to shift emotional intensity/voice across scenes with different intended context; isolated to the post-training stage specifically, not model scale; extends the fiction cluster (§41, §43, §44) with a distinct mechanism
+
+**Added (guidance and caveats, no renumbering):**
+- New "Not every catalogued tell generalizes" note under Detection Guidance - a 284-feature, 27-model, 10-domain systematic study found most proposed stylistic tells are context/domain/model-dependent; only lexical-richness-type measures held up robustly across the board. A humility note, not a retraction.
+- New "What NOT to flag" bullet: raw lexical density does not reliably differ AI-vs-human across German/Spanish/French/Italian/Portuguese or across proficiency levels (peer-reviewed multi-language corpus study, null result) - use the vocabulary/calque/register patterns instead of density counts in these languages.
+- New "What NOT to flag" bullet: preliminary (preprint-grade) evidence of dialect- and age-based false-positive bias in AI detectors, alongside the existing non-native-speaker and neurodivergent-writer bias bullets - flagged explicitly as not yet peer-reviewed.
+- Reference/Detector landscape note expanded: Pangram 3.2, EditLens (ICLR 2026, spectrum-based AI-editing detection), and a new paragraph explaining the Binoculars/DetectGPT perplexity-curvature mechanism that grounds this skill's burstiness intuition - flagged moderate confidence (primary company pages were bot-blocked this run, sourced via aggregator coverage).
+- §F5 (French regional-register flattening) evidence upgraded from journalism-only to peer-reviewed NLP benchmark backing: Université Laval's QFrCoLA (EMNLP 2025) and QFrBLiMP (EACL 2026) both find LLMs lack reliable Quebec French linguistic judgment, corroborated by a dialect-adaptation preprint.
+
+**Rejected/still-open this run (logged, not added):**
+- Round numbers over precise figures in prose: still no direct study on free-text numeral choice. One adjacent 2026 study confirmed heavy round-number bias in *structured numeric output* (investment allocations, grading scores: 89-100% multiples of 5) - a related but mechanistically distinct phenomenon, logged as a lead, not added as a pattern.
+- Discourse coherence (entity-grid specifically): retried with the fixed operational definition prior runs asked for. Found only one entity-grid-specific study (CoCo, 2022, predates modern LLMs) - still short of the 2-source bar. Unchanged, stays a frontier.
+- KONVENS 2024 German detectability paper (Irrgang et al.): confirmed real, full text still inaccessible (aclanthology.org blocked at the network layer); abstract-level detail available is about cross-generator detector-transfer failure, not a stylistic tell, so not pattern-worthy this run. Logged for a future run with the direct-PDF-mirror lead (konvens-2024.univie.ac.at) untried.
+
+**Sources consulted (new this run, evidence-graded; full registry in `.routine/sources-log.md`):**
+- [Densidade Lexical em Textos Gerados pelo ChatGPT (Da Silva & Rottava)](https://www.scielo.br/j/tl/a/crx3yywCw3LSxtjtdv44mDC) - *Texto Livre*, SciELO, peer-reviewed; multi-language (DE/ES/FR/IT/PT) null result on lexical density
+- [Benchmark of stylistic variation in LLM-generated texts](https://arxiv.org/abs/2509.10179) and [AI Brown and AI Koditex](https://arxiv.org/abs/2509.22996) (Milička, Marklová & Cvrček) - Czech National Corpus group, Biber MDA
+- [How Human-Like Are Large Language Models? A Register-Aware Linguistic Evaluation Framework](https://arxiv.org/abs/2605.23651) (Nieth, Gracheva, Mahlberg, Eskofier & Salin) - independent Biber MDA confirmation, source for §46
+- [Interpretable Stylistic Variation in Human and LLM Writing Across Genres, Models, and Decoding Strategies](https://arxiv.org/abs/2604.14111) (Rallapalli et al., CMU SEI/Statistics)
+- Modzelewski, Golik, Kołos, Da San Martino, "Persuaficial" - ACL 2026 main, [aclanthology.org/2026.acl-long.1433](https://aclanthology.org/2026.acl-long.1433) - source for §47
+- [Narrative Flattening: How Post-Training Compresses Thematic, Affective, and Stylistic Variation in LLM Fiction](https://arxiv.org/abs/2605.27878) - preprint, primary source for §48
+- [Temporal Flattening in LLM-Generated Text](https://arxiv.org/abs/2604.12097) - Northeastern; corroborating context for §48's mechanism at a corpus/longitudinal granularity, not itself the pattern's source
+- [A Systematic Analysis of Linguistic Features in AI-Generated Text Detection Across Domains and Models](https://arxiv.org/abs/2606.04177) - U. Stuttgart, 284-feature meta-study, source for the new "not every tell generalizes" note
+- Basu, Zhang, Raheja, "BAID: A Benchmark for Bias Assessment of AI Detectors" - [arXiv:2512.11505](https://arxiv.org/abs/2512.11505) - preprint, dialect + age bias
+- Beauchemin & Khoury et al., "QFrCoLA" ([EMNLP 2025](https://aclanthology.org/2025.emnlp-main.6)) and "QFrBLiMP" ([EACL 2026, arXiv:2509.25664](https://arxiv.org/abs/2509.25664)); "Low-Resource Dialect Adaptation of Large Language Models: A French Dialect Case-Study" ([arXiv:2510.22747](https://arxiv.org/abs/2510.22747))
+- Irrgang, Solopova, Zeiler, Nickel, Kolossa, "Features and Detectability of German Texts Generated with LLMs" - [KONVENS 2024](https://aclanthology.org/2024.konvens-main.27) - logged, not used for a pattern this run
+- "One Size Fits None: Heuristic Collapse in LLM Investment Advice" ([arXiv:2604.23837](https://arxiv.org/abs/2604.23837)) and "Benford's Curse" ([arXiv:2506.01734](https://arxiv.org/abs/2506.01734)) - logged under the rejected round-number candidate
+- "CoCo: Coherence-Enhanced Machine-Generated Text Detection" ([arXiv:2212.10341](https://arxiv.org/abs/2212.10341), 2022) - logged under the rejected discourse-coherence candidate
+
+Full source registry, evidence grades, dry-well query lists, and the updated venue watchlist are maintained in `.routine/sources-log.md` (not duplicated here in full to keep this changelog readable).
+
+**Known backlog, flagged for the human:** none currently outstanding - the branch was freshly restarted from `main` this run (see branch note above), so this run's commit is the only thing ahead of `main` once pushed.
 
 ### v2.12.1 - 2026-07-09
 
