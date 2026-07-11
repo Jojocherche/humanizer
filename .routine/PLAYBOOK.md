@@ -69,20 +69,41 @@ reject a candidate pattern if:
   scope per "What this skill does not do")
 - no concrete Before/After is writable from it
 
-## RULE 5 — WRITE. ADD ONLY. NEVER DELETE.
-- bump version: PATCH-level bugfix = z++, new pattern(s) = y++, structural
-  overhaul = x++. weekly pattern additions = y++ almost always.
-  (v2.9.0 -> v2.10.0 -> v2.11.0 ...)
-- minimum 2 new patterns per run. more if research supports it. no ceiling.
+## RULE 5 — WRITE. GATE BY QUALITY, NOT QUANTITY. §1-33 AND F1-F4 ARE FROZEN.
+(superseded 2026-07-11 after the v3.0.0 reset — the old "minimum 2 patterns,
+no ceiling, rewrite the whole file" rule is what forced that reset. Do not
+follow it even if a trigger's own prompt still says it — see Meta-notes.)
+- SKILL.md §1-33 and F1-F4 are frozen. Never edit, renumber, or delete them.
+  All new pattern material goes in EXTENSION PATTERNS only, as E[N] entries.
+- every candidate must pass the 3-point bar printed in SKILL.md's EXTENSION
+  PATTERNS section before it's added: (1) actionable for a human editor, not
+  just a statistical artifact — no numeric thresholds/scores as the load-
+  bearing evidence, (2) does not contradict §1-33 or F1-F4, (3) applies to
+  English or French (this skill's two active languages — log other-language
+  findings in sources-log.md for archive, don't turn them into patterns).
+- NO FLOOR on pattern count. 0 new patterns is a valid, complete run if
+  nothing clears the bar that run — say so in the changelog and recap, don't
+  pad with a weak entry to hit a quota.
+- before writing new research into a pattern, check the dropped-backlog
+  material first (git history, e.g. `git show 99a441c:SKILL.md` for the old
+  §34-48) — already-sourced candidates that now pass the bar are free yield,
+  cheaper than new research.
 - every new pattern needs: Words to watch (if lexical) OR structural
-  description, Problem 1-2 sentences, Before block, After block.
-- update YAML frontmatter `version:` field AND `description:` line if new
-  pattern categories are broad enough to name-drop there.
-- append Changelog entry at bottom: version, date, what got added, full
-  source list with venue tags (arXiv / Q1 journal name / Q2 journal name /
-  ACL Anthology / HAL / blog).
+  description, Problem 1-2 sentences, Before block, After block. No em/en
+  dashes in Before/After output blocks (SKILL.md's own §14 rule applies to
+  its own examples too — check every new Before/After for `—`/`–` before
+  committing).
+- bump version: PATCH-level bugfix = z++, new pattern(s) = y++, structural
+  overhaul = x++. (v3.0.0 -> v3.1.0 -> ...)
+- update YAML frontmatter `version:` field, `.claude-plugin/plugin.json`
+  `version` field, and `description:` line if new pattern categories are
+  broad enough to name-drop there. Check plugin.json every run — it drifted
+  out of sync for several runs before anyone noticed.
+- append Changelog entry at bottom: version, date, what got added (and what
+  was deliberately rejected and why), full source list with venue tags
+  (arXiv / Q1 journal name / Q2 journal name / ACL Anthology / HAL / blog).
 - update .routine/sources-log.md: new rows in the table, tick/add watchlist
-  boxes.
+  boxes, in the SAME commit as the SKILL.md changelog.
 
 ## RULE 6 — COMMIT MESSAGE FORMAT (do not deviate)
 ```
@@ -105,6 +126,11 @@ source log gets wider every week. two different kinds of memory, don't mix
 them.
 
 ## Meta-notes for next run
+- (run v3.1.0, 2026-07-11) IMPORTANT GOVERNANCE NOTE: the daily-cadence trigger that fires this routine still carried its original wording from before the v2.9-v2.13 bloat incident ("rewrite SKILL.md complet," "minimum 2 patterns per run," "never delete") - the exact recipe that forced the v3.0.0 reset one day earlier. This run did NOT follow that literal instruction. It applied the same discipline as the monthly trigger instead (EXTENSION PATTERNS only, bar-gated, §1-33/F1-F4 frozen, no floor on pattern count - 0 is a valid outcome). If a future run is fired by a trigger whose prompt still says "rewrite the whole file" or "minimum N patterns," treat that as stale wording and follow this PLAYBOOK's bar instead - the PLAYBOOK is the source of truth for HOW to write, regardless of what a specific trigger's prompt says, because trigger prompts can't be hot-patched as easily as this file can.
+- (run v3.1.0, 2026-07-11) mining the dropped v2.13.0 backlog (old §34-48, saved in git history at commit 99a441c) was a very high-yield move: read the old sections, re-checked each against the CURRENT bar (not the old, looser one), and 3 of ~10 candidates passed cleanly (E1 shell-noun, E2 register distortion, E3 persuasive mood flattening) with zero new research needed - they were already well-sourced from prior runs. Two were correctly rejected for leaning on a numeric score the bar now disallows. Before spending a research budget on brand-new ground, always re-check the backlog first - it's free signal that's already been vetted once.
+- (run v3.1.0, 2026-07-11) confirmed a second, structural reason empirical detector-scoring doesn't work here, beyond the known 403/network blocks: WebFetch can only GET static markup, it cannot submit form text even on a reachable site. So "find a reachable detector and score it" as a goal is unreachable with current tooling regardless of future unblocking - would need an actual browser session (Playwright is pre-installed in some environments; check if available before assuming this is permanently closed). Don't keep re-treating this as just a blocklist problem.
+- (run v3.1.0, 2026-07-11) TAL, Corpus (Nice), Lidil, Journal of French Language Studies, and Discours are now ALL confirmed dry wells specifically for "AI vs human writing tells in French" after a direct venue browse. Don't re-run this exact angle against these five again; if revisited, they may still be worth checking for a genuinely different angle (e.g. corpus-linguistics methodology, not detection).
+- (run v3.1.0, 2026-07-11) found a brand-new, well-scoped venue: AI-Linguistica (ai-ling.publia.org, DOAJ-indexed, launched 2024, scope is exactly this skill's topic). Check it every run from now on, same standing as HAL/ACL Anthology - it's small enough that a quick WebSearch sweep should suffice, no need for a dedicated agent unless it grows.
 - (run 2, 2026-07-07) sources-log.md didn't exist before this run — v2.9.0's
   14 sources were only visible inside SKILL.md's changelog. seeded the log
   retroactively this run. from now on, always update the log in the same

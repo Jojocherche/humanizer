@@ -1,6 +1,6 @@
 ---
 name: humanizer
-version: 3.0.0
+version: 3.1.0
 description: |
   Remove signs of AI-generated writing from text. Use when editing or reviewing
   text to make it sound more natural and human-written. Based on Wikipedia's
@@ -688,14 +688,56 @@ Apply these in addition to, not instead of, the sections above when humanizing F
 
 ## EXTENSION PATTERNS
 
-This section is reserved for new patterns added by the monthly evolution routine. Each entry must meet the bar below before being added here. Entries here are stable and permanent once added.
+This section is reserved for new patterns added by the evolution routine. Each entry must meet the bar below before being added here. Entries here are stable and permanent once added.
 
 **Bar for a new entry:**
 1. The pattern is observable and actionable for a writer (not just a statistical artifact)
 2. It does not contradict any existing numbered section (§1–33) or French pattern (F1–F4)
 3. It applies to at least one of the languages this skill actively covers (English or French)
 
-*No entries yet.*
+### E1. Shell-Noun Anaphoric Reference Overuse
+
+**Words to watch:** This approach, this study, this analysis, this framework, this finding — repeated as the subject to restart a sentence and refer back to something just said, often paired with a contentless intensifier ("this approach demonstrates," "this finding highlights").
+
+**Problem:** Instead of using a pronoun, a more specific restatement, or combining two sentences into one, AI text carries the argument forward by restarting with an abstract "shell noun." One is normal writing; three or four in a row, each reintroducing the same referent from scratch, is a tell.
+
+**Before:**
+> This report examines the relationship between soil pH and crop yield. This approach shows that acidity above 6.5 reduces nitrogen uptake. This finding points to the need for targeted lime application.
+
+**After:**
+> This report looks at how soil pH affects crop yield and finds that acidity above 6.5 reduces nitrogen uptake, which points toward targeted lime application rather than blanket treatment.
+
+### E2. Register Distortion Toward the "Informational" Pole
+
+**Problem:** Even when a passage calls for genuine involvement - a text to a friend, a diary entry, a casual aside - AI writing pulls toward a more informational, nominalized, impersonal register: more nouns and prepositional phrases, fewer contractions, fewer private verbs ("think," "feel," "guess"), fewer hedges, less first/second-person address. This is broader than AI vocabulary (§7) or a missing personal opinion (see PERSONALITY AND SOUL): it is a register-level shift that shows up even in texts with none of the usual AI vocabulary words.
+
+**Before:**
+> I wanted to update you regarding the situation with the apartment. The landlord has indicated that the lease renewal process will require additional documentation, and it appears the timeline may be extended by approximately two weeks.
+
+**After:**
+> So the landlord thing dragged on. They want more paperwork before they'll renew the lease, ugh. Looks like it's two more weeks, maybe. I'll keep you posted.
+
+### E3. Persuasive Mood Flattening
+
+**Problem:** When asked to write persuasively, especially *subtly* persuasively rather than as an obvious pitch, AI text leans on hedged modal verbs ("might," "could," "may want to consider") and neutral declaratives, and under-uses the rhetorical questions and exclamatory force human persuasive writing reaches for. This is distinct from the lexical authority-tropes in §27: it's about sentence mood and rhetorical stance, not word choice, and it makes subtly persuasive AI writing read as flat rather than convincing.
+
+**Before:**
+> You might want to consider that switching providers could potentially reduce your costs. It may be worth evaluating your options.
+
+**After:**
+> Why are you still paying for this? Switch providers. Smaller bill, full stop.
+
+### E4. Additional Anglicized Calques in French (extends F2)
+
+**Mots à surveiller :** faire du sens (calque de "make sense" ; français correct : avoir du sens), adresser un problème/une question (calque de "address a problem" ; français correct : traiter/résoudre un problème, se pencher sur une question).
+
+**Problème :** Au-delà des calques déjà listés en F2 (réaliser, supporter, opportunité), ces deux tournures traduisent directement l'anglais plutôt que d'utiliser l'expression française idiomatique. Une étude comparant un corpus humain et un corpus généré par LLM en français et en néerlandais a mesuré ce type d'écart directement imputable à l'influence de l'anglais dans la sortie des modèles.
+
+**Avant :**
+> Cette proposition ne fait pas vraiment de sens dans le contexte actuel, et l'équipe devra adresser ce problème avant la prochaine réunion.
+
+**Après :**
+> Cette proposition n'a pas vraiment de sens dans le contexte actuel, et l'équipe devra régler ce problème avant la prochaine réunion.
 
 
 ## Reference
@@ -706,6 +748,21 @@ Key insight from Wikipedia: "LLMs use statistical algorithms to guess what shoul
 
 
 ## Changelog
+
+### v3.1.0 - 2026-07-11
+
+Added 4 patterns to EXTENSION PATTERNS, each checked against the v3.0.0 bar (actionable, no contradiction with §1-33/F1-F4, applies to English or French) before inclusion:
+
+- **E1** Shell-Noun Anaphoric Reference Overuse (mined from the dropped v2.13.0 backlog, re-verified against the bar - passes cleanly, no reliance on a statistical score)
+- **E2** Register Distortion Toward the "Informational" Pole (mined from the dropped backlog; sourced from two independent Biber multidimensional-analysis studies, arXiv 2509.10179 and arXiv 2605.23651)
+- **E3** Persuasive Mood Flattening (mined from the dropped backlog; sourced from a 6-language incl. French persuasion benchmark, ACL 2026 main, aclanthology.org/2026.acl-long.1433)
+- **E4** Additional Anglicized Calques in French, extending F2 without editing it ("faire du sens," "adresser un problème"; sourced from Rigouts Terryn & de Lhoneux, LREC-COLING 2024 HumEval workshop, aclanthology.org/2024.humeval-1.2, a peer-reviewed human-vs-LLM French/Dutch comparison)
+
+Two backlog candidates were re-evaluated and deliberately NOT re-added: flat sentence-length cadence and uniform paragraph architecture, both of which lean on a numeric score (burstiness 0.65-0.85, a 70-80% cohesion-spread shrink) that v3.0.0 explicitly dropped as "too theoretical to apply consistently" - the underlying idea is already covered qualitatively by the "Vary your rhythm" bullet in PERSONALITY AND SOUL, so re-adding it would have been redundant, not new.
+
+Sync check: upstream blader/humanizer (`main`) has no commits beyond the v2.8.2 base already folded into v3.0.0 - no-op, nothing to merge.
+
+Research this run: 3 parallel agents covering (1) AI-detector test-site reachability + empirical scoring, (2) direct francophone Q1/Q2 journal venue browsing, (3) citation-chase on the 3 heaviest-cited sources already logged + a general fresh sweep. Full source list, dry wells, and the updated journals/archives watchlist are in `.routine/sources-log.md`. Notable non-pattern finding: all 12 tested AI-detector sites (ZeroGPT, GPTZero, Copyleaks, QuillBot, Winston AI, Originality.ai, Sapling, Writer.com, Content at Scale, Undetectable.ai, Scribbr, Crossplag) return HTTP 403 to this environment - empirical detector-scoring of the skill's own Before/After pairs remains an open frontier pending a different environment or tool.
 
 ### v3.0.0 - 2026-07-10
 
